@@ -51,7 +51,14 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Use import.meta.env.VITE_API_KEY for Vite compatibility
+      const apiKey = import.meta.env.VITE_API_KEY;
+      
+      if (!apiKey) {
+        throw new Error("API Key is missing. Please configure VITE_API_KEY or API_KEY in your environment.");
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       
       // Construct history for context
       const history = messages.map(m => ({
@@ -91,7 +98,7 @@ const ChatBot: React.FC = () => {
       }
     } catch (error) {
       console.error("Chat error:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "Désolé, je rencontre des difficultés techniques. Veuillez réessayer plus tard." }]);
+      setMessages(prev => [...prev, { role: 'model', text: "Désolé, je rencontre des difficultés techniques (API Key manquante ou erreur réseau). Veuillez réessayer plus tard." }]);
     } finally {
       setIsLoading(false);
     }

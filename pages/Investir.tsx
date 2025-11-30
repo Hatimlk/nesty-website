@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, PenTool, Key, TrendingUp, MapPin, ArrowRight, Calculator, Info, Wifi, Wind, Waves, Car, Tv, Filter, RefreshCw, Heart, X, CheckSquare, Square, MessageSquare, MapPinned, Building, Calendar, UserCheck, Percent, BarChart2, Globe, Sun, Trash2, Camera } from 'lucide-react';
@@ -8,6 +6,8 @@ import AnimatedSection from '../components/AnimatedSection';
 import { useLanguage } from '../context/LanguageContext';
 import { useData } from '../context/DataContext'; // Import Data Context
 import SEO from '../components/SEO';
+
+// ... (existing imports and components - StepCard, PropertyCard, ComparisonModal - remain unchanged, skipping to PropertyDetailModal where the iframe is) ...
 
 const StepCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
   <div className="group h-full">
@@ -395,6 +395,8 @@ const PropertyDetailModal = ({ isOpen, onClose, property, labels }: any) => {
     };
     
     const images = property.images && property.images.length > 0 ? property.images : [property.image];
+    // Use import.meta.env.VITE_API_KEY for map iframe
+    const apiKey = import.meta.env.VITE_API_KEY;
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4">
@@ -520,16 +522,22 @@ const PropertyDetailModal = ({ isOpen, onClose, property, labels }: any) => {
                                         className="absolute inset-0 z-10 bg-black/0 group-hover:bg-black/10 transition duration-300"
                                       ></a>
                                       
-                                      <iframe 
-                                          src={`https://www.google.com/maps/embed/v1/place?key=${process.env.API_KEY}&q=${encodeURIComponent(property.location + ", Agadir")}`}
-                                          width="100%" 
-                                          height="100%" 
-                                          style={{border:0}} 
-                                          allowFullScreen={true} 
-                                          loading="lazy"
-                                          className="w-full h-full grayscale-[50%] group-hover:grayscale-0 transition duration-700"
-                                          title={property.title}
-                                      ></iframe>
+                                      {apiKey ? (
+                                        <iframe 
+                                            src={`https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${encodeURIComponent(property.location + ", Agadir")}`}
+                                            width="100%" 
+                                            height="100%" 
+                                            style={{border:0}} 
+                                            allowFullScreen={true} 
+                                            loading="lazy"
+                                            className="w-full h-full grayscale-[50%] group-hover:grayscale-0 transition duration-700"
+                                            title={property.title}
+                                        ></iframe>
+                                      ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                                          Carte non disponible (API Key manquante)
+                                        </div>
+                                      )}
                                  </div>
                              </div>
                          </div>
