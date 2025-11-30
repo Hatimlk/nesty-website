@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ChevronDown, ChevronUp, Clock, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
@@ -42,7 +40,7 @@ const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
 };
 
 const ContactInfoCard = ({ icon: Icon, title, content }: any) => (
-  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-start gap-4">
+  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-start gap-4 h-full hover:shadow-md transition-shadow duration-300">
     <div className="bg-nesty-darker text-white p-3 rounded-full flex-shrink-0">
       <Icon size={24} />
     </div>
@@ -182,150 +180,154 @@ const Contact: React.FC = () => {
            </div>
         </AnimatedSection>
         
-        {/* Info Cards Row */}
-        <AnimatedSection delay={100}>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <ContactInfoCard 
-              icon={MapPin}
-              title="Agadir, Maroc"
-              content="Centre Ville"
-            />
-             <ContactInfoCard 
-              icon={Phone}
-              title="Téléphone"
-              content="+212 690 87 97 77"
-            />
-             <ContactInfoCard 
-              icon={Mail}
-              title="Email"
-              content="contact@nesty.ma"
-            />
+        {/* Info Cards Row - Staggered Animation */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <AnimatedSection delay={100} className="h-full">
+              <ContactInfoCard 
+                icon={MapPin}
+                title="Agadir, Maroc"
+                content="Centre Ville"
+              />
+            </AnimatedSection>
+            <AnimatedSection delay={200} className="h-full">
+              <ContactInfoCard 
+                icon={Phone}
+                title="Téléphone"
+                content="+212 690 87 97 77"
+              />
+            </AnimatedSection>
+            <AnimatedSection delay={300} className="h-full">
+              <ContactInfoCard 
+                icon={Mail}
+                title="Email"
+                content="contact@nesty.ma"
+              />
+            </AnimatedSection>
+        </div>
+
+        {/* Split Layout: Form & Image - Main Container Animation */}
+        <AnimatedSection className="mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white rounded-3xl shadow-xl overflow-hidden min-h-[600px]">
+             {/* Left: Form */}
+             <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+                 {isSubmitted ? (
+                   <div className="text-center py-10 animate-fade-in-up">
+                     <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                       <CheckCircle size={40} />
+                     </div>
+                     <h2 className="text-2xl font-bold text-nesty-dark mb-4">{t.contact.success_title}</h2>
+                     <p className="text-gray-600 mb-8">{t.contact.success_desc}</p>
+                     <button 
+                        onClick={() => setIsSubmitted(false)}
+                        className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-full font-bold text-gray-700 transition"
+                     >
+                        {t.contact.send_another}
+                     </button>
+                   </div>
+                 ) : (
+                   <>
+                     <div className="mb-8">
+                        <div className="inline-block px-3 py-1 bg-gray-100 rounded text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">
+                          {t.contact.contact_us}
+                        </div>
+                        <h2 className="text-3xl font-bold text-nesty-dark mb-2">{t.contact.form_title}</h2>
+                        <p className="text-gray-500">{t.contact.form_subtitle}</p>
+                     </div>
+                     
+                     <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                           <div>
+                              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_name}</label>
+                              <input 
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder={t.contact.ph_name}
+                                required
+                                className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:ring-nesty-accent/50 focus:bg-white transition"
+                              />
+                           </div>
+                           <div>
+                              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_email}</label>
+                              <input 
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder={t.contact.ph_email}
+                                required
+                                className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:bg-white transition ${errors.email ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-nesty-accent/50'}`}
+                              />
+                              {errors.email && <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>}
+                           </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                           <div>
+                              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_phone}</label>
+                              <input 
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                placeholder={t.contact.ph_phone}
+                                className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:bg-white transition ${errors.phone ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-nesty-accent/50'}`}
+                              />
+                              {errors.phone && <p className="text-red-500 text-xs mt-1 ml-1">{errors.phone}</p>}
+                           </div>
+                           <div>
+                              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_subject}</label>
+                              <select 
+                                  name="subject"
+                                  value={formData.subject}
+                                  onChange={handleChange}
+                                  className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:ring-nesty-accent/50 focus:bg-white transition cursor-pointer"
+                              >
+                                  <option>{t.contact.opt_estimation}</option>
+                                  <option>{t.contact.opt_gestion}</option>
+                                  <option>{t.contact.opt_investment}</option>
+                                  <option>{t.contact.opt_conseil}</option>
+                                  <option>{t.contact.opt_other}</option>
+                              </select>
+                           </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_message}</label>
+                            <textarea 
+                              name="message"
+                              value={formData.message}
+                              onChange={handleChange}
+                              rows={4}
+                              placeholder={t.contact.ph_message}
+                              required
+                              className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:ring-nesty-accent/50 focus:bg-white transition resize-none"
+                            ></textarea>
+                        </div>
+
+                        <button 
+                          type="submit"
+                          className="w-full bg-nesty-darker text-white font-bold py-4 rounded-full shadow-lg hover:bg-nesty-accent hover:text-nesty-darker transition-all duration-300 mt-4 flex items-center justify-center gap-2"
+                        >
+                          {t.contact.btn_send}
+                        </button>
+                     </form>
+                   </>
+                 )}
+             </div>
+
+             {/* Right: Image */}
+             <div className="hidden lg:block relative h-full min-h-[600px]">
+                <img 
+                  src="https://images.unsplash.com/photo-1577412647305-991150c7d163?q=80&w=1932&auto=format&fit=crop" 
+                  alt="Nesty Office Meeting" 
+                  className="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition-transform duration-[2s]"
+                />
+                <div className="absolute inset-0 bg-nesty-darker/20"></div>
+             </div>
           </div>
         </AnimatedSection>
-
-        {/* Split Layout: Form & Image */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white rounded-3xl shadow-xl overflow-hidden min-h-[600px]">
-           {/* Left: Form */}
-           <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-             <AnimatedSection delay={200}>
-               {isSubmitted ? (
-                 <div className="text-center py-10">
-                   <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                     <CheckCircle size={40} />
-                   </div>
-                   <h2 className="text-2xl font-bold text-nesty-dark mb-4">{t.contact.success_title}</h2>
-                   <p className="text-gray-600 mb-8">{t.contact.success_desc}</p>
-                   <button 
-                      onClick={() => setIsSubmitted(false)}
-                      className="px-6 py-3 bg-gray-100 hover:bg-gray-200 rounded-full font-bold text-gray-700 transition"
-                   >
-                      {t.contact.send_another}
-                   </button>
-                 </div>
-               ) : (
-                 <>
-                   <div className="mb-8">
-                      <div className="inline-block px-3 py-1 bg-gray-100 rounded text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">
-                        {t.contact.contact_us}
-                      </div>
-                      <h2 className="text-3xl font-bold text-nesty-dark mb-2">{t.contact.form_title}</h2>
-                      <p className="text-gray-500">{t.contact.form_subtitle}</p>
-                   </div>
-                   
-                   <form onSubmit={handleSubmit} className="space-y-5">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_name}</label>
-                            <input 
-                              type="text"
-                              name="name"
-                              value={formData.name}
-                              onChange={handleChange}
-                              placeholder={t.contact.ph_name}
-                              required
-                              className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:ring-nesty-accent/50 focus:bg-white transition"
-                            />
-                         </div>
-                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_email}</label>
-                            <input 
-                              type="email"
-                              name="email"
-                              value={formData.email}
-                              onChange={handleChange}
-                              placeholder={t.contact.ph_email}
-                              required
-                              className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:bg-white transition ${errors.email ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-nesty-accent/50'}`}
-                            />
-                            {errors.email && <p className="text-red-500 text-xs mt-1 ml-1">{errors.email}</p>}
-                         </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_phone}</label>
-                            <input 
-                              type="tel"
-                              name="phone"
-                              value={formData.phone}
-                              onChange={handleChange}
-                              placeholder={t.contact.ph_phone}
-                              className={`w-full bg-slate-50 border rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:bg-white transition ${errors.phone ? 'border-red-300 focus:ring-red-200' : 'border-gray-200 focus:ring-nesty-accent/50'}`}
-                            />
-                            {errors.phone && <p className="text-red-500 text-xs mt-1 ml-1">{errors.phone}</p>}
-                         </div>
-                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_subject}</label>
-                            <select 
-                                name="subject"
-                                value={formData.subject}
-                                onChange={handleChange}
-                                className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:ring-nesty-accent/50 focus:bg-white transition cursor-pointer"
-                            >
-                                <option>{t.contact.opt_estimation}</option>
-                                <option>{t.contact.opt_gestion}</option>
-                                <option>{t.contact.opt_investment}</option>
-                                <option>{t.contact.opt_conseil}</option>
-                                <option>{t.contact.opt_other}</option>
-                            </select>
-                         </div>
-                      </div>
-
-                      <div>
-                          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 ml-1">{t.contact.label_message}</label>
-                          <textarea 
-                            name="message"
-                            value={formData.message}
-                            onChange={handleChange}
-                            rows={4}
-                            placeholder={t.contact.ph_message}
-                            required
-                            className="w-full bg-slate-50 border border-gray-200 rounded-xl px-4 py-3 text-nesty-dark focus:outline-none focus:ring-2 focus:ring-nesty-accent/50 focus:bg-white transition resize-none"
-                          ></textarea>
-                      </div>
-
-                      <button 
-                        type="submit"
-                        className="w-full bg-nesty-darker text-white font-bold py-4 rounded-full shadow-lg hover:bg-nesty-accent hover:text-nesty-darker transition-all duration-300 mt-4 flex items-center justify-center gap-2"
-                      >
-                        {t.contact.btn_send}
-                      </button>
-                   </form>
-                 </>
-               )}
-             </AnimatedSection>
-           </div>
-
-           {/* Right: Image */}
-           <div className="hidden lg:block relative h-full min-h-[600px]">
-              <img 
-                src="https://images.unsplash.com/photo-1577412647305-991150c7d163?q=80&w=1932&auto=format&fit=crop" 
-                alt="Nesty Office Meeting" 
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-nesty-darker/20"></div>
-           </div>
-        </div>
 
         {/* Office Locations */}
         <section className="mt-24">
@@ -333,28 +335,34 @@ const Contact: React.FC = () => {
               <div className="mb-12">
                  <h2 className="text-3xl font-bold text-nesty-dark">{t.contact.locations_title}</h2>
               </div>
+           </AnimatedSection>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <AnimatedSection delay={100} className="h-full">
                  <LocationCard 
                    title="Agadir Centre"
                    address="Avenue Hassan II, Agadir 80000"
                    phone="+212 690 87 97 77"
                    directionsText={t.contact.get_directions}
                  />
+              </AnimatedSection>
+              <AnimatedSection delay={200} className="h-full">
                  <LocationCard 
                    title="Marina Agadir"
                    address="Résidence La Marina, Quai Ouest"
                    phone="+212 525 89 90 93"
                    directionsText={t.contact.get_directions}
                  />
+              </AnimatedSection>
+              <AnimatedSection delay={300} className="h-full">
                  <LocationCard 
                    title="Taghazout Hub"
                    address="Route d'Essaouira, Taghazout Bay"
                    phone="+212 661 12 34 56"
                    directionsText={t.contact.get_directions}
                  />
-              </div>
-           </AnimatedSection>
+              </AnimatedSection>
+           </div>
         </section>
 
         {/* CTA Banner */}
