@@ -1,0 +1,7 @@
+{
+  "name": "Nesty - Gestion Locative Agadir",
+  "description": "Spécialiste de la location courte durée à Agadir. Conciergerie, Investissement et Conseil immobilier.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
