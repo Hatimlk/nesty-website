@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Linkedin, Mail, Phone, MapPin, Globe, Lock } from 'lucide-react';
+import { Instagram, Linkedin, Mail, Phone, MapPin, Globe, Lock, Share2, Facebook, Twitter } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 // Custom TikTok Icon in Lucide style
@@ -23,6 +23,16 @@ const TikTokIcon = ({ size = 18, className = "" }) => (
 
 const Footer: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
+  
+  // Social Sharing Links Construction
+  const currentUrl = window.location.href;
+  const shareText = "Nesty - Conciergerie & Investissement à Agadir";
+  const shareUrls = {
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
+    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`,
+    linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(shareText)}`,
+    whatsapp: `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + currentUrl)}`
+  };
 
   return (
     <footer className="bg-nesty-darker text-white pt-16 pb-8 border-t border-slate-800">
@@ -37,13 +47,15 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 mb-6 leading-relaxed">
               {t.footer.desc}
             </p>
-            <div className="flex space-x-4">
+            
+            {/* Follow Us */}
+            <div className="flex space-x-4 mb-8">
               <a 
                 href="https://www.linkedin.com/company/ste-nesty-sarl/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="bg-slate-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-nesty-accent transition-all duration-300 transform hover:scale-110 shadow-md"
-                aria-label="LinkedIn"
+                aria-label="Follow on LinkedIn"
               >
                 <Linkedin size={18} />
               </a>
@@ -52,7 +64,7 @@ const Footer: React.FC = () => {
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="bg-slate-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-nesty-accent transition-all duration-300 transform hover:scale-110 shadow-md"
-                aria-label="Instagram"
+                aria-label="Follow on Instagram"
               >
                 <Instagram size={18} />
               </a>
@@ -61,10 +73,28 @@ const Footer: React.FC = () => {
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="bg-slate-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-nesty-accent transition-all duration-300 transform hover:scale-110 shadow-md"
-                aria-label="TikTok"
+                aria-label="Follow on TikTok"
               >
                 <TikTokIcon size={18} />
               </a>
+            </div>
+
+            {/* Share This Page */}
+            <div>
+               <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                 <Share2 size={12} /> Partager cette page
+               </p>
+               <div className="flex gap-2">
+                  <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-600/20 text-blue-500 hover:bg-blue-600 hover:text-white transition" aria-label="Share on Facebook">
+                    <Facebook size={16} />
+                  </a>
+                  <a href={shareUrls.twitter} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-sky-500/20 text-sky-500 hover:bg-sky-500 hover:text-white transition" aria-label="Share on Twitter">
+                    <Twitter size={16} />
+                  </a>
+                  <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-700/20 text-blue-700 hover:bg-blue-700 hover:text-white transition" aria-label="Share on LinkedIn">
+                    <Linkedin size={16} />
+                  </a>
+               </div>
             </div>
           </div>
 
