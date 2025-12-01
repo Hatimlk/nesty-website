@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Linkedin, Mail, Phone, MapPin, Globe, Lock, Share2, Facebook, Twitter } from 'lucide-react';
+import { Instagram, Linkedin, Mail, Phone, MapPin, Globe, Lock, Share2, Facebook, Twitter, MessageCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 // Custom TikTok Icon in Lucide style
@@ -93,6 +93,9 @@ const Footer: React.FC = () => {
                   </a>
                   <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-700/20 text-blue-700 hover:bg-blue-700 hover:text-white transition" aria-label="Share on LinkedIn">
                     <Linkedin size={16} />
+                  </a>
+                  <a href={shareUrls.whatsapp} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-green-500/20 text-green-500 hover:bg-green-500 hover:text-white transition" aria-label="Share on WhatsApp">
+                    <MessageCircle size={16} />
                   </a>
                </div>
             </div>
