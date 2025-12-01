@@ -1,4 +1,3 @@
-```markdown
 # 🏠 Nesty - Real Estate Website
 
 A modern, responsive real estate website built with Next.js, featuring property listings, search functionality, and an intuitive user interface.
