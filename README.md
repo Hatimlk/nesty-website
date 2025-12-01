@@ -189,7 +189,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👥 Author
 
-- **Hatim Lakouas** - [Hatimlk](https://github.com/Hatimlk)
+- **Hatim Lakrouni** - [Hatimlk](https://github.com/Hatimlk)
 
 ## 🙏 Acknowledgments
 
