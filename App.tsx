@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation, Navigate, Link } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -52,6 +52,18 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   </div>
 );
 
+// 404 Page Component
+const NotFound: React.FC = () => (
+  <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-center px-4">
+    <h1 className="text-6xl font-bold text-nesty-dark mb-4">404</h1>
+    <h2 className="text-2xl font-bold text-gray-600 mb-8">Page non trouvée</h2>
+    <p className="text-gray-500 mb-8 max-w-md">La page que vous recherchez n'existe pas ou a été déplacée.</p>
+    <Link to="/" className="bg-nesty-accent text-nesty-darker px-8 py-3 rounded-full font-bold shadow-lg hover:bg-nesty-accentDark hover:text-white transition">
+      Retour à l'accueil
+    </Link>
+  </div>
+);
+
 const App: React.FC = () => {
   return (
     <AuthProvider>
@@ -77,6 +89,9 @@ const App: React.FC = () => {
                 <Route path="properties" element={<AdminProperties />} />
                 <Route path="messages" element={<AdminMessages />} />
               </Route>
+              
+              {/* Catch-all 404 */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </HashRouter>
         </LanguageProvider>

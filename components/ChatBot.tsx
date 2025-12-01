@@ -51,14 +51,8 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Use import.meta.env.VITE_API_KEY for Vite compatibility
-      const apiKey = import.meta.env.VITE_API_KEY;
-      
-      if (!apiKey) {
-        throw new Error("API Key is missing. Please configure VITE_API_KEY or API_KEY in your environment.");
-      }
-
-      const ai = new GoogleGenAI({ apiKey });
+      // Use process.env.API_KEY exclusively
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
       // Construct history for context
       const history = messages.map(m => ({

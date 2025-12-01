@@ -395,8 +395,8 @@ const PropertyDetailModal = ({ isOpen, onClose, property, labels }: any) => {
     };
     
     const images = property.images && property.images.length > 0 ? property.images : [property.image];
-    // Use import.meta.env.VITE_API_KEY for map iframe
-    const apiKey = import.meta.env.VITE_API_KEY;
+    // Use process.env.API_KEY for map iframe
+    const apiKey = process.env.API_KEY;
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4">
