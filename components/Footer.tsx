@@ -2,19 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin, Mail, Phone, MapPin, Globe, Lock, Share2, Facebook, Twitter, MessageCircle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { MainLogoWhite } from '../assets';
 
 // Custom TikTok Icon in Lucide style
 const TikTokIcon = ({ size = 18, className = "" }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width={size} 
-    height={size} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     className={className}
   >
     <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
@@ -23,7 +24,7 @@ const TikTokIcon = ({ size = 18, className = "" }) => (
 
 const Footer: React.FC = () => {
   const { t, language, setLanguage } = useLanguage();
-  
+
   // Social Sharing Links Construction
   const currentUrl = window.location.href;
   const shareText = "Nesty - Conciergerie & Investissement à Agadir";
@@ -38,40 +39,40 @@ const Footer: React.FC = () => {
     <footer className="bg-nesty-darker text-white pt-16 pb-8 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          
+
           {/* Brand Column */}
           <div>
-            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 lowercase tracking-tighter">
-              <div className="w-8 h-8 bg-nesty-accent rounded-md flex items-center justify-center text-nesty-darker font-bold text-lg">n</div> nesty
-            </h3>
+            <div className="mb-6">
+              <img src={MainLogoWhite} alt="Nesty" className="h-12 w-auto" />
+            </div>
             <p className="text-gray-400 mb-6 leading-relaxed">
               {t.footer.desc}
             </p>
-            
+
             {/* Follow Us */}
             <div className="flex space-x-4 mb-8">
-              <a 
-                href="https://www.linkedin.com/company/ste-nesty-sarl/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.linkedin.com/company/ste-nesty-sarl/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-slate-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-nesty-accent transition-all duration-300 transform hover:scale-110 shadow-md"
                 aria-label="Follow on LinkedIn"
               >
                 <Linkedin size={18} />
               </a>
-              <a 
-                href="https://www.instagram.com/nesty_morocco/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.instagram.com/nesty_morocco/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-slate-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-nesty-accent transition-all duration-300 transform hover:scale-110 shadow-md"
                 aria-label="Follow on Instagram"
               >
                 <Instagram size={18} />
               </a>
-              <a 
-                href="https://www.tiktok.com/@othman_kaddach" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="https://www.tiktok.com/@othman_kaddach"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-slate-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-nesty-accent transition-all duration-300 transform hover:scale-110 shadow-md"
                 aria-label="Follow on TikTok"
               >
@@ -81,23 +82,23 @@ const Footer: React.FC = () => {
 
             {/* Share This Page */}
             <div>
-               <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
-                 <Share2 size={12} /> Partager cette page
-               </p>
-               <div className="flex gap-2">
-                  <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-600/20 text-blue-500 hover:bg-blue-600 hover:text-white transition" aria-label="Share on Facebook">
-                    <Facebook size={16} />
-                  </a>
-                  <a href={shareUrls.twitter} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-sky-500/20 text-sky-500 hover:bg-sky-500 hover:text-white transition" aria-label="Share on Twitter">
-                    <Twitter size={16} />
-                  </a>
-                  <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-700/20 text-blue-700 hover:bg-blue-700 hover:text-white transition" aria-label="Share on LinkedIn">
-                    <Linkedin size={16} />
-                  </a>
-                  <a href={shareUrls.whatsapp} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-green-500/20 text-green-500 hover:bg-green-500 hover:text-white transition" aria-label="Share on WhatsApp">
-                    <MessageCircle size={16} />
-                  </a>
-               </div>
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+                <Share2 size={12} /> Partager cette page
+              </p>
+              <div className="flex gap-2">
+                <a href={shareUrls.facebook} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-600/20 text-blue-500 hover:bg-blue-600 hover:text-white transition" aria-label="Share on Facebook">
+                  <Facebook size={16} />
+                </a>
+                <a href={shareUrls.twitter} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-sky-500/20 text-sky-500 hover:bg-sky-500 hover:text-white transition" aria-label="Share on Twitter">
+                  <Twitter size={16} />
+                </a>
+                <a href={shareUrls.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-700/20 text-blue-700 hover:bg-blue-700 hover:text-white transition" aria-label="Share on LinkedIn">
+                  <Linkedin size={16} />
+                </a>
+                <a href={shareUrls.whatsapp} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-green-500/20 text-green-500 hover:bg-green-500 hover:text-white transition" aria-label="Share on WhatsApp">
+                  <MessageCircle size={16} />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -144,19 +145,19 @@ const Footer: React.FC = () => {
 
         <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
           <div className="flex flex-col md:flex-row items-center gap-4 mb-4 md:mb-0">
-             <p>&copy; {new Date().getFullYear()} Nesty. {t.footer.rights}</p>
-             <button 
-               onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
-               className="flex items-center gap-2 text-nesty-accent hover:text-white transition-all duration-300 px-3 py-1 bg-white/5 hover:bg-nesty-accent rounded-full transform hover:scale-105 shadow-sm"
-             >
-               <Globe size={14} /> {language === 'fr' ? 'Français' : 'English'}
-             </button>
+            <p>&copy; {new Date().getFullYear()} Nesty. {t.footer.rights}</p>
+            <button
+              onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+              className="flex items-center gap-2 text-nesty-accent hover:text-white transition-all duration-300 px-3 py-1 bg-white/5 hover:bg-nesty-accent rounded-full transform hover:scale-105 shadow-sm"
+            >
+              <Globe size={14} /> {language === 'fr' ? 'Français' : 'English'}
+            </button>
           </div>
           <div className="flex gap-6 items-center">
             <Link to="/legal" className="hover:text-nesty-accent transition">{t.footer.legal}</Link>
             <Link to="/privacy" className="hover:text-nesty-accent transition">{t.footer.privacy}</Link>
             <Link to="/admin" className="hover:text-nesty-accent transition flex items-center gap-1 opacity-60 hover:opacity-100" aria-label="Admin Dashboard">
-               <Lock size={14} />
+              <Lock size={14} />
             </Link>
           </div>
         </div>

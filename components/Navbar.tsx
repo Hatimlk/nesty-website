@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Globe, Key } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { MainLogoWhite } from '../assets';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,9 +30,8 @@ const Navbar: React.FC = () => {
   const toggleLanguage = () => setLanguage(language === 'fr' ? 'en' : 'fr');
 
   // Classes for the navbar background transition
-  const navClass = `fixed w-full z-50 transition-all duration-300 ${
-    scrolled || !isHome ? 'bg-nesty-darker shadow-lg py-2' : 'bg-transparent py-4'
-  }`;
+  const navClass = `fixed w-full z-50 transition-all duration-300 ${scrolled || !isHome ? 'bg-nesty-darker shadow-lg py-2' : 'bg-transparent py-4'
+    }`;
 
   // Link styles
   const linkClass = `text-sm font-semibold uppercase tracking-wide transition-colors duration-300 text-white hover:text-nesty-accent`;
@@ -39,28 +39,19 @@ const Navbar: React.FC = () => {
   // Special button style for "Mes Propriétés"
   const buttonClass = "bg-nesty-accent text-nesty-darker px-4 py-2 rounded-md text-sm font-bold hover:bg-nesty-accentDark hover:text-white transition-all duration-300 uppercase shadow-md transform hover:scale-105 active:scale-95";
 
-  // Nesty Logo SVG Component
-  const NestyLogo = () => (
-    <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Abstract House/N Shape */}
-      <path d="M20 80V40L50 15L80 40V80H60V55C60 50 55 45 50 45C45 45 40 50 40 55V80H20Z" fill="#2DD4BF" />
-      {/* Keyhole dot */}
-      <circle cx="50" cy="65" r="4" fill="#1E293B" />
-      {/* Keyhole slot */}
-      <path d="M48 65L46 75H54L52 65" fill="#1E293B" />
-    </svg>
-  );
+
 
   return (
     <nav className={navClass}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0 flex items-center gap-3 group">
-             <div className="bg-white p-1.5 rounded-lg shadow-lg group-hover:scale-105 transition duration-300">
-                <NestyLogo />
-             </div>
-             <span className="text-3xl font-bold text-white tracking-tighter lowercase font-sans relative bottom-0.5">nesty</span>
+          <Link to="/" className="flex-shrink-0 flex items-center group">
+            <img
+              src={MainLogoWhite}
+              alt="Nesty"
+              className="h-10 w-auto group-hover:scale-105 transition duration-300"
+            />
           </Link>
 
           {/* Desktop Menu */}
@@ -70,13 +61,13 @@ const Navbar: React.FC = () => {
             <Link to="/investir" className={linkClass}>{t.nav.investir}</Link>
             <Link to="/conseil" className={linkClass}>{t.nav.conseil}</Link>
             <Link to="/contact" className={linkClass}>{t.nav.contact}</Link>
-            
+
             <a href="https://book.hostfully.com/nesty-sarl-au/search" target="_blank" rel="noreferrer" className={buttonClass}>
               {t.nav.properties}
             </a>
 
             {/* Language Switcher */}
-            <button 
+            <button
               onClick={toggleLanguage}
               className="text-white hover:text-nesty-accent hover:bg-white/10 px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1 text-sm font-bold transform hover:scale-105"
               aria-label="Switch Language"
@@ -88,7 +79,7 @@ const Navbar: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-4">
-            <button 
+            <button
               onClick={toggleLanguage}
               className="text-white hover:text-nesty-accent hover:bg-white/10 px-2 py-1 rounded-full transition-all duration-300 flex items-center gap-1 text-sm font-bold transform hover:scale-105"
             >
@@ -113,13 +104,13 @@ const Navbar: React.FC = () => {
             <Link to="/investir" onClick={toggleMenu} className="block px-3 py-2 text-white hover:text-nesty-accent font-medium hover:bg-white/5 rounded-lg transition">{t.nav.investir}</Link>
             <Link to="/conseil" onClick={toggleMenu} className="block px-3 py-2 text-white hover:text-nesty-accent font-medium hover:bg-white/5 rounded-lg transition">{t.nav.conseil}</Link>
             <Link to="/contact" onClick={toggleMenu} className="block px-3 py-2 text-white hover:text-nesty-accent font-medium hover:bg-white/5 rounded-lg transition">{t.nav.contact}</Link>
-            
+
             <div className="h-px bg-gray-800 my-2"></div>
-            
-            <a 
-              href="https://book.hostfully.com/nesty-sarl-au/search" 
-              target="_blank" 
-              rel="noreferrer" 
+
+            <a
+              href="https://book.hostfully.com/nesty-sarl-au/search"
+              target="_blank"
+              rel="noreferrer"
               className={`mt-2 flex items-center justify-center gap-2 w-full ${buttonClass}`}
             >
               <Key size={18} />
