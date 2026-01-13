@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Globe, Key } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
-import { MainLogoWhite } from '../assets';
+import { Menu, X, Phone, Globe, ChevronDown, User, LogIn, Key } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
+import { MainLogo, MainLogoWhite } from '@/assets';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
 import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle, ChevronDown, ChevronUp, Clock, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { useLocation, Link } from 'react-router-dom';
-import SectionHeader from '../components/SectionHeader';
-import AnimatedSection from '../components/AnimatedSection';
+import { SectionHeader, AnimatedSection } from '@/components/common';
+import { SEO } from '@/components/layout';
 import { useLanguage } from '../context/LanguageContext';
 import { useData } from '../context/DataContext';
-import SEO from '../components/SEO';
 
 interface FaqItemProps {
   question: string;

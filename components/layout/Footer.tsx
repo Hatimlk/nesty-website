@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin, Mail, Phone, MapPin, Globe, Lock, Share2, Facebook, Twitter, MessageCircle } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
-import { MainLogoWhite } from '../assets';
+import { useLanguage } from '@/context/LanguageContext';
+import { MainLogoWhite } from '@/assets';
 
 // Custom TikTok Icon in Lucide style
 const TikTokIcon = ({ size = 18, className = "" }) => (

@@ -1,16 +1,14 @@
 import React from 'react';
 import { HashRouter, Routes, Route, useLocation, Navigate, Link } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Conciergerie from './pages/Conciergerie';
-import Investir from './pages/Investir';
-import Conseil from './pages/Conseil';
-import Contact from './pages/Contact';
-import Legal from './pages/Legal';
-import Privacy from './pages/Privacy';
-import ChatBot from './components/ChatBot';
-import FloatingWhatsApp from './components/FloatingWhatsApp';
+import { Navbar, Footer } from '@/components/layout';
+import { ChatBot, FloatingWhatsApp } from '@/components/features';
+import Home from '@/pages/Home';
+import Conciergerie from '@/pages/Conciergerie';
+import Investir from '@/pages/Investir';
+import Conseil from '@/pages/Conseil';
+import Contact from '@/pages/Contact';
+import Legal from '@/pages/Legal';
+import Privacy from '@/pages/Privacy';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
@@ -89,7 +87,7 @@ const App: React.FC = () => {
                 <Route path="properties" element={<AdminProperties />} />
                 <Route path="messages" element={<AdminMessages />} />
               </Route>
-              
+
               {/* Catch-all 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>

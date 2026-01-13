@@ -2,11 +2,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, TrendingUp, Users, Star, Home as HomeIcon, Key, Briefcase, ShieldCheck } from 'lucide-react';
-import SectionHeader from '../components/SectionHeader';
-import AnimatedSection from '../components/AnimatedSection';
-import TestimonialCarousel from '../components/TestimonialCarousel';
+import { SectionHeader, AnimatedSection, TestimonialCarousel } from '@/components/common';
+import { SEO } from '@/components/layout';
 import { useLanguage } from '../context/LanguageContext';
-import SEO from '../components/SEO';
 
 const Counter = ({ end, duration = 2000, suffix = "", prefix = "", decimals = 0 }: { end: number, duration?: number, suffix?: string, prefix?: string, decimals?: number }) => {
   const [count, setCount] = useState(0);
@@ -52,7 +50,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col">
-      <SEO 
+      <SEO
         title={t.home.meta_title}
         description={t.home.meta_desc}
       />
@@ -60,9 +58,9 @@ const Home: React.FC = () => {
       <section className="relative h-screen min-h-[600px] flex items-center justify-center">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop" 
-            alt="Agadir Taghazout Bay Residence Luxury View" 
+          <img
+            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop"
+            alt="Agadir Taghazout Bay Residence Luxury View"
             className="w-full h-full object-cover"
           />
           {/* Darker Gradient overlay for better text contrast - Tuned for Teal Theme */}
@@ -74,24 +72,24 @@ const Home: React.FC = () => {
           <span className="inline-block py-1.5 px-4 rounded-full bg-nesty-accent/20 backdrop-blur-md text-nesty-accent border border-nesty-accent/50 text-xs md:text-sm font-bold tracking-widest mb-6 animate-fade-in-up uppercase shadow-[0_0_15px_rgba(45,212,191,0.3)]">
             {t.home.badge}
           </span>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-xl animate-fade-in-up" style={{animationDelay: '0.2s'}}>
-            {t.home.hero_title_1} <br/>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight drop-shadow-xl animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            {t.home.hero_title_1} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-nesty-accent to-teal-200 drop-shadow-sm">
               {t.home.hero_title_2}
             </span>
           </h1>
-          <p className="text-xl md:text-2xl text-slate-200 mb-10 max-w-3xl mx-auto font-medium drop-shadow-md animate-fade-in-up" style={{animationDelay: '0.4s'}}>
+          <p className="text-xl md:text-2xl text-slate-200 mb-10 max-w-3xl mx-auto font-medium drop-shadow-md animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
             {t.home.hero_desc}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{animationDelay: '0.6s'}}>
-            <Link 
-              to="/contact" 
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+            <Link
+              to="/contact"
               className="px-8 py-4 bg-nesty-accent text-nesty-darker font-bold rounded-full hover:bg-white hover:text-nesty-accentDark transition transform hover:-translate-y-1 shadow-[0_4px_20px_rgba(45,212,191,0.4)] text-lg border border-transparent"
             >
               {t.home.cta_estimate}
             </Link>
-            <Link 
-              to="/conciergerie" 
+            <Link
+              to="/conciergerie"
               className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-bold rounded-full hover:bg-white/20 transition transform hover:-translate-y-1 shadow-xl text-lg border border-white/20"
             >
               {t.home.cta_services}
@@ -101,34 +99,34 @@ const Home: React.FC = () => {
 
         {/* Floating Stats Bar */}
         <div className="absolute bottom-0 w-full z-20 transform translate-y-1/2 px-4 hidden md:block">
-            <div className="max-w-7xl mx-auto">
-               <div className="bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] p-8 grid grid-cols-4 divide-x divide-gray-100 border border-gray-100">
-                  <div className="text-center group cursor-default">
-                    <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
-                      <Counter end={50} prefix="+" suffix="%" />
-                    </div>
-                    <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_revenue}</div>
-                  </div>
-                  <div className="text-center group cursor-default">
-                    <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
-                       <Counter end={85} suffix="%" />
-                    </div>
-                    <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_occupancy}</div>
-                  </div>
-                  <div className="text-center group cursor-default">
-                    <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
-                       <Counter end={4.9} suffix="/5" decimals={1} />
-                    </div>
-                    <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_rating}</div>
-                  </div>
-                  <div className="text-center group cursor-default">
-                    <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
-                       <Counter end={60} prefix="+" />
-                    </div>
-                    <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_managed}</div>
-                  </div>
-               </div>
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] p-8 grid grid-cols-4 divide-x divide-gray-100 border border-gray-100">
+              <div className="text-center group cursor-default">
+                <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
+                  <Counter end={50} prefix="+" suffix="%" />
+                </div>
+                <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_revenue}</div>
+              </div>
+              <div className="text-center group cursor-default">
+                <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
+                  <Counter end={85} suffix="%" />
+                </div>
+                <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_occupancy}</div>
+              </div>
+              <div className="text-center group cursor-default">
+                <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
+                  <Counter end={4.9} suffix="/5" decimals={1} />
+                </div>
+                <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_rating}</div>
+              </div>
+              <div className="text-center group cursor-default">
+                <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
+                  <Counter end={60} prefix="+" />
+                </div>
+                <div className="text-gray-500 text-sm font-bold uppercase tracking-wider">{t.home.stats_managed}</div>
+              </div>
             </div>
+          </div>
         </div>
       </section>
 
@@ -139,9 +137,9 @@ const Home: React.FC = () => {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-             <SectionHeader title={t.home.why_title} subtitle={t.home.why_subtitle} />
+            <SectionHeader title={t.home.why_title} subtitle={t.home.why_subtitle} />
           </AnimatedSection>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <AnimatedSection delay={100} className="h-full">
               <div className="p-8 rounded-2xl bg-slate-50 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 text-center group h-full">
@@ -190,7 +188,7 @@ const Home: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection>
-             <SectionHeader title={t.home.services_title} subtitle={t.home.services_subtitle} light />
+            <SectionHeader title={t.home.services_title} subtitle={t.home.services_subtitle} light />
           </AnimatedSection>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -221,7 +219,7 @@ const Home: React.FC = () => {
             <AnimatedSection delay={200}>
               <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-nesty-accent/50 transition duration-500 flex flex-col hover:shadow-[0_0_30px_rgba(45,212,191,0.15)] h-full">
                 <div className="h-48 overflow-hidden">
-                   <img src="https://picsum.photos/id/1076/600/400" alt="Investissement" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700" />
+                  <img src="https://picsum.photos/id/1076/600/400" alt="Investissement" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700" />
                 </div>
                 <div className="p-8 flex-grow relative">
                   <div className="absolute top-0 right-0 -mt-6 mr-6 w-12 h-12 bg-nesty-accent rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition duration-300">
@@ -240,9 +238,9 @@ const Home: React.FC = () => {
               </div>
             </AnimatedSection>
 
-             {/* Service 3 */}
-             <AnimatedSection delay={300}>
-               <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-nesty-accent/50 transition duration-500 flex flex-col hover:shadow-[0_0_30px_rgba(45,212,191,0.15)] h-full">
+            {/* Service 3 */}
+            <AnimatedSection delay={300}>
+              <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-nesty-accent/50 transition duration-500 flex flex-col hover:shadow-[0_0_30px_rgba(45,212,191,0.15)] h-full">
                 <div className="h-48 overflow-hidden">
                   <img src="https://picsum.photos/id/445/600/400" alt="Conseil" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700" />
                 </div>
@@ -303,8 +301,8 @@ const Home: React.FC = () => {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-             <SectionHeader title={t.home.testimonials_title} subtitle={t.home.testimonials_subtitle} />
-             <TestimonialCarousel />
+            <SectionHeader title={t.home.testimonials_title} subtitle={t.home.testimonials_subtitle} />
+            <TestimonialCarousel />
           </AnimatedSection>
         </div>
       </section>
@@ -312,17 +310,17 @@ const Home: React.FC = () => {
       {/* CTA SECTION */}
       <section className="py-24 bg-slate-50 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full">
-           <div className="absolute top-10 left-10 w-20 h-20 border-4 border-nesty-accent/20 rounded-full animate-spin-slow"></div>
-           <div className="absolute bottom-10 right-10 w-32 h-32 bg-nesty-accent/5 rounded-full blur-xl"></div>
+          <div className="absolute top-10 left-10 w-20 h-20 border-4 border-nesty-accent/20 rounded-full animate-spin-slow"></div>
+          <div className="absolute bottom-10 right-10 w-32 h-32 bg-nesty-accent/5 rounded-full blur-xl"></div>
         </div>
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-           <AnimatedSection>
-             <h2 className="text-3xl md:text-4xl font-bold text-nesty-dark mb-6">{t.home.cta_bottom_title}</h2>
-             <p className="text-xl text-gray-600 mb-10">{t.home.cta_bottom_desc}</p>
-             <Link to="/contact" className="px-10 py-4 bg-nesty-accent text-nesty-darker font-bold rounded-full hover:bg-nesty-accentDark hover:text-white transition shadow-[0_10px_20px_rgba(45,212,191,0.3)] text-lg">
-               {t.home.cta_bottom_btn}
-             </Link>
-           </AnimatedSection>
+          <AnimatedSection>
+            <h2 className="text-3xl md:text-4xl font-bold text-nesty-dark mb-6">{t.home.cta_bottom_title}</h2>
+            <p className="text-xl text-gray-600 mb-10">{t.home.cta_bottom_desc}</p>
+            <Link to="/contact" className="px-10 py-4 bg-nesty-accent text-nesty-darker font-bold rounded-full hover:bg-nesty-accentDark hover:text-white transition shadow-[0_10px_20px_rgba(45,212,191,0.3)] text-lg">
+              {t.home.cta_bottom_btn}
+            </Link>
+          </AnimatedSection>
         </div>
       </section>
 

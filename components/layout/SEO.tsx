@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLanguage } from '../context/LanguageContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { useLocation } from 'react-router-dom';
 
 interface SEOProps {
@@ -9,22 +9,22 @@ interface SEOProps {
   type?: string;
 }
 
-const SEO: React.FC<SEOProps> = ({ 
-  title, 
-  description, 
+const SEO: React.FC<SEOProps> = ({
+  title,
+  description,
   image = 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop',
-  type = 'website' 
+  type = 'website'
 }) => {
   const { language } = useLanguage();
   const location = useLocation();
-  
+
   // Construct canonical URL
   const currentUrl = window.location.href;
 
   useEffect(() => {
     // 1. Update Title
     document.title = title;
-    
+
     // 2. Helper function to manage meta tags
     const setMetaTag = (attr: string, key: string, content: string) => {
       let element = document.querySelector(`meta[${attr}="${key}"]`);
@@ -54,7 +54,7 @@ const SEO: React.FC<SEOProps> = ({
     setMetaTag('name', 'twitter:title', title);
     setMetaTag('name', 'twitter:description', description);
     setMetaTag('name', 'twitter:image', image);
-    
+
   }, [title, description, image, type, currentUrl, language]);
 
   return null;
