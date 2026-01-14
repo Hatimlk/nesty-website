@@ -214,6 +214,7 @@ const Contact: React.FC = () => {
       <SEO
         title={t.contact.meta_title}
         description={t.contact.meta_desc}
+        image={contactOffice}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">

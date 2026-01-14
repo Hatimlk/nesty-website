@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, useLocation, Navigate, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate, Link } from 'react-router-dom';
 import { Navbar, Footer } from '@/components/layout';
 import { ChatBot, FloatingWhatsApp } from '@/components/features';
 import Home from '@/pages/Home';
@@ -67,7 +67,7 @@ const App: React.FC = () => {
     <AuthProvider>
       <DataProvider>
         <LanguageProvider>
-          <HashRouter>
+          <BrowserRouter>
             <ScrollToTop />
             <Routes>
               {/* Public Routes */}
@@ -91,7 +91,7 @@ const App: React.FC = () => {
               {/* Catch-all 404 */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </HashRouter>
+          </BrowserRouter>
         </LanguageProvider>
       </DataProvider>
     </AuthProvider>

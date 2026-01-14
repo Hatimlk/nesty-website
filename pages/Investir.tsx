@@ -837,6 +837,7 @@ const Investir: React.FC = () => {
       <SEO
         title={t.investir.meta_title}
         description={t.investir.meta_desc}
+        image={investHero}
       />
       <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
         {/* Background Image */}

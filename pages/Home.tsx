@@ -58,6 +58,7 @@ const Home: React.FC = () => {
       <SEO
         title={t.home.meta_title}
         description={t.home.meta_desc}
+        image={heroBg}
       />
       {/* HERO SECTION */}
       <section className="relative h-screen min-h-[600px] flex items-center justify-center">

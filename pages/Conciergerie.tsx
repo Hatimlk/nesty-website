@@ -30,6 +30,7 @@ const Conciergerie: React.FC = () => {
       <SEO
         title={t.conciergerie.meta_title}
         description={t.conciergerie.meta_desc}
+        image={conciergeHero}
       />
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">

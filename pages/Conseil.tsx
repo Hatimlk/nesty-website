@@ -100,6 +100,7 @@ const Conseil: React.FC = () => {
       <SEO
         title={t.conseil.meta_title}
         description={t.conseil.meta_desc}
+        image={conseilHero}
       />
       <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
         {/* Background Image */}
