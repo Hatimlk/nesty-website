@@ -14,8 +14,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      // robustly expose the key whether it's named API_KEY or VITE_API_KEY
-      'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_API_KEY),
+      // no custom defines needed
     },
   };
 });

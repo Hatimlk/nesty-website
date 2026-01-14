@@ -5,15 +5,15 @@ import { GoogleGenAI } from "@google/genai";
 const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{
-    role: 'user' | 'model', 
-    text: string, 
-    groundingChunks?: any[] 
+    role: 'user' | 'model',
+    text: string,
+    groundingChunks?: any[]
   }[]>([
     { role: 'model', text: "Bonjour ! Je suis l'assistant virtuel Nesty. Comment puis-je vous aider concernant nos services de conciergerie ou d'investissement à Agadir ?" }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [userLocation, setUserLocation] = useState<{latitude: number, longitude: number} | undefined>(undefined);
+  const [userLocation, setUserLocation] = useState<{ latitude: number, longitude: number } | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -51,9 +51,9 @@ const ChatBot: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Use process.env.API_KEY exclusively
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      
+      // Use import.meta.env.VITE_GEMINI_API_KEY exclusively
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+
       // Construct history for context
       const history = messages.map(m => ({
         role: m.role,
@@ -88,7 +88,7 @@ const ChatBot: React.FC = () => {
       const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
 
       if (text) {
-         setMessages(prev => [...prev, { role: 'model', text: text, groundingChunks }]);
+        setMessages(prev => [...prev, { role: 'model', text: text, groundingChunks }]);
       }
     } catch (error) {
       console.error("Chat error:", error);
@@ -129,39 +129,38 @@ const ChatBot: React.FC = () => {
           <div className="flex-grow overflow-y-auto p-4 bg-slate-50 space-y-4 custom-scrollbar">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${
-                  msg.role === 'user' 
-                    ? 'bg-nesty-accent text-nesty-darker rounded-tr-none' 
+                <div className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user'
+                    ? 'bg-nesty-accent text-nesty-darker rounded-tr-none'
                     : 'bg-white border border-gray-200 text-gray-700 rounded-tl-none'
-                }`}>
+                  }`}>
                   {msg.text}
-                  
+
                   {/* Grounding Chunks (Maps) */}
                   {msg.groundingChunks && msg.groundingChunks.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-3 pt-2 border-t border-gray-100/50">
                       {msg.groundingChunks.map((chunk: any, i: number) => {
                         // Handle Google Maps grounding structure
                         const mapData = chunk.maps || (chunk.web?.uri?.includes("google.com/maps") ? chunk.web : null);
-                        
+
                         if (mapData) {
-                           // Some responses put data in sourcePlace, others at root of map object
-                           const uri = mapData.sourcePlace?.uri || mapData.uri;
-                           const title = mapData.sourcePlace?.name || mapData.title || "Voir la carte";
-                           
-                           if (uri) {
-                             return (
-                               <a 
-                                 key={i}
-                                 href={uri}
-                                 target="_blank"
-                                 rel="noreferrer"
-                                 className="inline-flex items-center gap-1.5 text-xs bg-gray-50 border border-gray-200 text-nesty-darker hover:text-nesty-accent px-2.5 py-1.5 rounded-full hover:bg-white hover:shadow-sm transition font-medium"
-                               >
-                                 <MapPin size={12} className="text-nesty-accent" />
-                                 {title}
-                               </a>
-                             );
-                           }
+                          // Some responses put data in sourcePlace, others at root of map object
+                          const uri = mapData.sourcePlace?.uri || mapData.uri;
+                          const title = mapData.sourcePlace?.name || mapData.title || "Voir la carte";
+
+                          if (uri) {
+                            return (
+                              <a
+                                key={i}
+                                href={uri}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 text-xs bg-gray-50 border border-gray-200 text-nesty-darker hover:text-nesty-accent px-2.5 py-1.5 rounded-full hover:bg-white hover:shadow-sm transition font-medium"
+                              >
+                                <MapPin size={12} className="text-nesty-accent" />
+                                {title}
+                              </a>
+                            );
+                          }
                         }
                         return null;
                       })}
@@ -190,8 +189,8 @@ const ChatBot: React.FC = () => {
               placeholder="Posez votre question..."
               className="flex-grow bg-gray-50 border border-gray-200 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-nesty-accent focus:ring-1 focus:ring-nesty-accent/50 transition"
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isLoading || !input.trim()}
               className="bg-nesty-darker text-white p-2 rounded-full hover:bg-nesty-accent hover:text-nesty-darker transition disabled:opacity-50 disabled:cursor-not-allowed"
             >

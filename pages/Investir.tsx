@@ -373,8 +373,8 @@ const PropertyDetailModal = ({ isOpen, onClose, property, labels }: any) => {
   };
 
   const images = property.images && property.images.length > 0 ? property.images : [property.image];
-  // Use process.env.API_KEY for map iframe
-  const apiKey = process.env.API_KEY;
+  // Use import.meta.env for Vite environment variables
+  const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-4">
