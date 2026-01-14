@@ -1,6 +1,18 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Property, Testimonial, Message } from '../types';
 
+export interface AdminProfile {
+  firstName: string;
+  lastName: string;
+  email: string;
+  bio: string;
+  avatar?: string;
+  notifications: {
+    reservations: boolean;
+    messages: boolean;
+  };
+}
+
 // Initial Mock Data
 const INITIAL_PROPERTIES: Property[] = [
   {
@@ -94,6 +106,8 @@ interface DataContextType {
   addMessage: (message: Omit<Message, 'id' | 'date' | 'read'>) => void;
   markMessageRead: (id: number) => void;
   deleteMessage: (id: number) => void;
+  adminProfile: AdminProfile;
+  updateAdminProfile: (profile: AdminProfile) => void;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
@@ -114,6 +128,17 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [adminProfile, setAdminProfile] = useState<AdminProfile>(() => {
+    const saved = localStorage.getItem('nesty_admin_profile');
+    return saved ? JSON.parse(saved) : {
+      firstName: 'Admin',
+      lastName: 'Nesty',
+      email: 'admin@nesty.ma',
+      bio: '',
+      notifications: { reservations: true, messages: true }
+    };
+  });
+
   useEffect(() => {
     localStorage.setItem('nesty_properties', JSON.stringify(properties));
   }, [properties]);
@@ -125,6 +150,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     localStorage.setItem('nesty_messages', JSON.stringify(messages));
   }, [messages]);
+
+  useEffect(() => {
+    localStorage.setItem('nesty_admin_profile', JSON.stringify(adminProfile));
+  }, [adminProfile]);
 
   const addProperty = (property: Property) => {
     setProperties([...properties, { ...property, id: Date.now() }]);
@@ -156,17 +185,23 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setMessages(messages.filter(m => m.id !== id));
   };
 
+  const updateAdminProfile = (profile: AdminProfile) => {
+    setAdminProfile(profile);
+  };
+
   return (
-    <DataContext.Provider value={{ 
-      properties, 
-      testimonials, 
+    <DataContext.Provider value={{
+      properties,
+      testimonials,
       messages,
-      addProperty, 
-      updateProperty, 
+      addProperty,
+      updateProperty,
       deleteProperty,
       addMessage,
       markMessageRead,
-      deleteMessage
+      deleteMessage,
+      adminProfile,
+      updateAdminProfile
     }}>
       {children}
     </DataContext.Provider>

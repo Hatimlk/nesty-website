@@ -19,6 +19,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProperties from './pages/admin/AdminProperties';
 import AdminMessages from './pages/admin/AdminMessages';
+import AdminSettings from './pages/admin/AdminSettings';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -86,6 +87,7 @@ const App: React.FC = () => {
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="properties" element={<AdminProperties />} />
                 <Route path="messages" element={<AdminMessages />} />
+                <Route path="settings" element={<AdminSettings />} />
               </Route>
 
               {/* Catch-all 404 */}
