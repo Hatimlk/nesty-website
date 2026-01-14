@@ -5,17 +5,27 @@ import { SectionHeader, AnimatedSection } from '@/components/common';
 import { SEO } from '@/components/layout';
 import { useLanguage } from '../context/LanguageContext';
 import { useData } from '../context/DataContext';
+import investHero from '@/assets/images/invest-hero.png';
+import investCsBefore from '@/assets/images/invest-cs-before.png';
+import investCsAfter from '@/assets/images/invest-cs-after.png';
+import investCsDetail from '@/assets/images/invest-cs-detail.png';
+import investCsIken from '@/assets/images/invest-cs-iken.png';
 
 // ... (existing imports and components - StepCard, PropertyCard, ComparisonModal - remain unchanged, skipping to PropertyDetailModal where the iframe is) ...
 
 const StepCard = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
   <div className="group h-full">
-    <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-nesty-accent/30 transition duration-300 h-full flex flex-col">
-      <div className="mb-6 text-nesty-accent bg-teal-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-nesty-accent group-hover:text-white transition duration-300 shadow-sm">
-        <Icon size={32} />
+    <div className="bg-white p-8 rounded-2xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] border border-gray-100 hover:shadow-[0_20px_40px_-5px_rgba(45,212,191,0.15)] hover:border-nesty-accent/40 transition duration-500 h-full flex flex-col relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-24 h-24 bg-nesty-accent/5 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-150 duration-700"></div>
+
+      <div className="mb-6 relative">
+        <div className="text-nesty-accent bg-teal-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-nesty-accent group-hover:text-white transition duration-500 shadow-sm border border-nesty-accent/20">
+          <Icon size={32} strokeWidth={1.5} />
+        </div>
       </div>
-      <h3 className="text-xl font-bold text-nesty-dark mb-3">{title}</h3>
-      <p className="text-gray-600 leading-relaxed flex-grow">{description}</p>
+
+      <h3 className="text-xl font-bold text-nesty-dark mb-3 group-hover:text-nesty-accent transition duration-300">{title}</h3>
+      <p className="text-gray-600 leading-relaxed flex-grow text-sm">{description}</p>
     </div>
   </div>
 );
@@ -82,14 +92,15 @@ const PropertyCard = ({ id, image, title, location, price, specs, amenities = []
   };
 
   return (
-    <div className={`bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-300 group border h-full flex flex-col relative ${isSelected ? 'ring-4 ring-nesty-accent border-nesty-accent scale-[1.02]' : 'border-gray-100 hover:shadow-2xl hover:scale-[1.02]'}`}>
+    <div className={`bg-white rounded-2xl overflow-hidden shadow-lg transition-all duration-500 group border h-full flex flex-col relative ${isSelected ? 'ring-2 ring-nesty-accent border-nesty-accent shadow-teal-100' : 'border-gray-100 hover:shadow-[0_20px_40px_-5px_rgba(0,0,0,0.2)] hover:border-gray-200'}`}>
       {/* Image Container */}
       <div className="relative h-64 overflow-hidden flex-shrink-0 cursor-pointer" onClick={onClickDetails}>
-        {/* Parallax Effect Image: slower transition (1000ms) and vertical translation (-translate-y-2) combined with scale */}
+        <div className="absolute inset-0 bg-gray-900/10 group-hover:bg-transparent transition-colors duration-500 z-10 transition-colors"></div>
+        {/* Parallax Effect Image */}
         <img
           src={image}
           alt={title}
-          className="w-full h-full object-cover transform transition-transform duration-1000 ease-out group-hover:scale-110 group-hover:-translate-y-2"
+          className="w-full h-full object-cover transform transition-transform duration-1000 ease-out group-hover:scale-110"
         />
 
         {/* Favorite Button */}
@@ -99,108 +110,84 @@ const PropertyCard = ({ id, image, title, location, price, specs, amenities = []
             e.stopPropagation();
             onToggleFavorite(id);
           }}
-          className="absolute top-4 right-4 z-20 p-2 bg-white rounded-full shadow-md hover:scale-110 transition-transform duration-200 group/heart"
+          className="absolute top-4 right-4 z-20 p-2.5 bg-white/90 backdrop-blur rounded-full shadow-lg hover:scale-110 transition-transform duration-200 group/heart border border-white/50"
           aria-label="Add to favorites"
         >
           <Heart
-            size={20}
-            className={`transition-colors duration-300 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400 group-hover/heart:text-red-400'}`}
+            size={18}
+            className={`transition-colors duration-300 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400 group-hover/heart:text-red-500'}`}
           />
         </button>
 
-        {/* Compare Checkbox - Visible on hover or if selected */}
+        {/* Compare Checkbox */}
         <button
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             onToggleCompare(id);
           }}
-          className={`absolute bottom-4 right-4 z-20 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-md flex items-center gap-2 hover:bg-white transition-all duration-300 cursor-pointer group/compare ${isSelected
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0'
+          className={`absolute bottom-4 right-4 z-20 bg-white/95 backdrop-blur px-3 py-1.5 rounded-lg shadow-lg flex items-center gap-2 hover:bg-white transition-all duration-300 cursor-pointer group/compare border border-white/50 ${isSelected
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0'
             }`}
         >
           {isSelected ? (
-            <CheckSquare size={18} className="text-nesty-accent fill-teal-50" />
+            <CheckSquare size={16} className="text-nesty-accent" />
           ) : (
-            <Square size={18} className="text-gray-400 group-hover/compare:text-nesty-accent" />
+            <Square size={16} className="text-gray-400 group-hover/compare:text-nesty-accent" />
           )}
           <span className={`text-xs font-bold ${isSelected ? 'text-nesty-accent' : 'text-gray-600'}`}>
             {labels.compare_btn}
           </span>
         </button>
 
-        {/* Label - Moved to Left */}
-        <div className="absolute top-4 left-4 bg-nesty-dark/90 backdrop-blur text-white px-3 py-1.5 rounded-md font-bold text-xs uppercase tracking-wider border-l-2 border-nesty-accent z-10">
+        {/* Label */}
+        <div className="absolute top-4 left-4 bg-nesty-darker/90 backdrop-blur text-white px-3 py-1 rounded-md font-bold text-[10px] uppercase tracking-wider border-l-2 border-nesty-accent z-10 shadow-lg">
           {labels.for_sale || "À Vendre"}
-        </div>
-
-        {/* HOVER OVERLAY with Button - Only shows if not interacting with checkboxes */}
-        <div className="absolute inset-0 bg-nesty-darker/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-0 backdrop-blur-[2px] pointer-events-none">
-          <div className="pointer-events-auto">
-            <button
-              onClick={onClickDetails}
-              className="bg-white text-nesty-darker font-bold py-3 px-8 rounded-full transform translate-y-8 group-hover:translate-y-0 transition-all duration-300 shadow-xl hover:bg-nesty-accent hover:text-white flex items-center gap-2"
-            >
-              {labels.viewDetails} <ArrowRight size={18} />
-            </button>
-          </div>
         </div>
       </div>
 
       <div className="p-6 flex flex-col flex-grow relative bg-white z-10">
-        <div className="flex justify-between items-start mb-2">
+        <div className="flex justify-between items-start mb-3">
           <div>
             <h3
-              className="text-xl font-bold text-nesty-dark group-hover:text-nesty-accent transition cursor-pointer"
+              className="text-lg font-bold text-nesty-dark group-hover:text-nesty-accent transition-colors duration-300 cursor-pointer line-clamp-1"
               onClick={onClickDetails}
+              title={title}
             >
               {title}
             </h3>
-            <div className="flex items-center text-gray-500 text-sm mt-1 gap-2">
-              <span className="flex items-center"><MapPin size={14} className="mr-1 text-gray-400" /> {location}</span>
-              {location && (
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location + ", Agadir")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-nesty-accent hover:text-nesty-darker transition-colors p-1 rounded-full hover:bg-nesty-accent/10 z-20"
-                  onClick={(e) => e.stopPropagation()}
-                  title={labels.view_map || "Voir sur la carte"}
-                >
-                  <MapPinned size={16} />
-                </a>
-              )}
+            <div className="flex items-center text-gray-500 text-xs mt-1.5 gap-2 font-medium">
+              <span className="flex items-center"><MapPin size={12} className="mr-1 text-nesty-accent/70" /> {location}</span>
             </div>
           </div>
-          <span className="text-xl font-bold text-nesty-accent">{price}</span>
         </div>
 
-        <div className="flex gap-4 mt-5 text-sm text-gray-600 border-t border-gray-100 pt-4 font-medium items-center">
-          <span>{specs.surface}</span>
-          <span className="text-gray-300">•</span>
-          <span>{specs.roomsDisplay || `${specs.rooms} ch`}</span>
-          <span className="text-gray-300">•</span>
+        <div className="flex items-baseline mb-4">
+          <span className="text-xl font-extrabold text-nesty-accent">{price}</span>
+        </div>
 
-          {/* Tooltip Wrapper */}
-          <div className="relative group/tooltip cursor-help">
-            <span className="text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 flex items-center gap-1">
+        <div className="flex gap-4 mb-4 text-xs text-gray-500 border-t border-gray-50 pt-3 font-semibold items-center">
+          <div className="flex items-center gap-1.5">
+            <Square size={14} className="text-gray-400" /> {specs.surface}
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Key size={14} className="text-gray-400" /> {specs.roomsDisplay || `${specs.rooms} ch`}
+          </div>
+
+          <div className="ml-auto">
+            <span className="text-green-600 bg-green-50 px-2 py-0.5 rounded border border-green-100 flex items-center gap-1 text-[10px] uppercase tracking-wide">
               {specs.roi}
             </span>
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-nesty-darker text-white text-xs rounded-md opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 pointer-events-none w-48 shadow-xl z-50 text-center">
-              {labels.roiTooltip}
-              {/* Arrow */}
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-nesty-darker"></div>
-            </div>
           </div>
         </div>
 
         {amenities && amenities.length > 0 && (
-          <div className="flex gap-3 mt-5">
-            {amenities.map((amenity: string, index: number) => (
+          <div className="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar">
+            {amenities.slice(0, 4).map((amenity: string, index: number) => (
               <div
                 key={index}
-                className="bg-white text-nesty-accent p-2 rounded-lg border border-nesty-accent/20 shadow-sm hover:bg-nesty-accent hover:text-white hover:border-nesty-accent transition-all duration-300 transform hover:-translate-y-1 cursor-default"
+                className="bg-slate-50 text-gray-400 p-1.5 rounded-md border border-gray-100 flex-shrink-0"
                 title={amenity}
               >
                 {getAmenityIcon(amenity)}
@@ -209,19 +196,12 @@ const PropertyCard = ({ id, image, title, location, price, specs, amenities = []
           </div>
         )}
 
-        <div className="mt-auto pt-6 grid grid-cols-2 gap-3">
+        <div className="mt-auto pt-3 flex gap-3">
           <button
             onClick={onClickDetails}
-            className="flex items-center justify-center gap-2 bg-nesty-darker text-white px-4 py-2.5 rounded-lg text-sm font-bold hover:bg-nesty-accent hover:text-nesty-darker transition-all duration-300 shadow-md group/btn"
+            className="flex-1 flex items-center justify-center gap-2 bg-slate-100 text-nesty-dark hover:bg-nesty-dark hover:text-white px-4 py-3 rounded-xl text-sm font-bold transition-all duration-300 group/btn"
           >
             {labels.viewDetails} <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-          </button>
-
-          <button
-            onClick={handleAskAgent}
-            className="flex items-center justify-center gap-2 border border-gray-200 text-nesty-dark bg-white hover:bg-gray-50 px-4 py-2.5 rounded-lg transition-all duration-300 font-bold text-sm shadow-sm"
-          >
-            <MessageSquare size={16} /> {labels.ask_agent}
           </button>
         </div>
       </div>
@@ -576,7 +556,7 @@ const InvestmentSimulator = () => {
   const roi = price > 0 ? (netRevenue / price) * 100 : 0;
 
   return (
-    <section className="py-20 bg-nesty-darker relative overflow-hidden">
+    <section id="simulator" className="py-20 bg-nesty-darker relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20 pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-nesty-accent rounded-full blur-[100px] transform translate-x-1/3 -translate-y-1/3"></div>
@@ -601,28 +581,30 @@ const InvestmentSimulator = () => {
                 <div>
                   <div className="flex justify-between items-center mb-4">
                     <label className="text-white font-bold flex items-center gap-2 text-lg">
-                      <div className="bg-nesty-accent p-1.5 rounded text-nesty-darker"><TrendingUp size={18} /></div>
+                      <div className="bg-nesty-accent p-1.5 rounded-lg text-nesty-darker shadow-lg shadow-teal-500/20"><TrendingUp size={18} /></div>
                       {t.investir.label_price}
                     </label>
-                    <span className="text-nesty-accent font-bold text-xl">{price.toLocaleString()} MAD</span>
+                    <span className="text-nesty-accent font-mono font-bold text-xl">{price.toLocaleString()}</span>
                   </div>
-                  <input
-                    type="range"
-                    min="500000"
-                    max="5000000"
-                    step="50000"
-                    value={price}
-                    onChange={(e) => setPrice(Number(e.target.value))}
-                    className="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-nesty-accent hover:accent-teal-300 transition-all"
-                  />
-                  <div className="mt-4 relative">
+                  <div className="relative h-12 flex items-center">
+                    <input
+                      type="range"
+                      min="500000"
+                      max="5000000"
+                      step="50000"
+                      value={price}
+                      onChange={(e) => setPrice(Number(e.target.value))}
+                      className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer accent-nesty-accent hover:accent-teal-300 transition-all z-10"
+                    />
+                  </div>
+                  <div className="mt-1 relative">
                     <input
                       type="number"
                       value={price}
                       onChange={(e) => setPrice(Number(e.target.value))}
-                      className="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-4 py-3 text-white focus:border-nesty-accent outline-none text-sm font-mono tracking-wide transition focus:bg-slate-800"
+                      className="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-nesty-accent outline-none text-sm font-mono tracking-wide transition focus:bg-slate-800 focus:shadow-[0_0_15px_rgba(45,212,191,0.1)]"
                     />
-                    <span className="absolute right-4 top-3 text-gray-400 text-sm font-bold">MAD</span>
+                    <span className="absolute right-4 top-3 text-gray-500 text-xs font-bold uppercase tracking-wider">MAD</span>
                   </div>
                 </div>
 
@@ -630,20 +612,22 @@ const InvestmentSimulator = () => {
                 <div>
                   <div className="flex justify-between items-center mb-4">
                     <label className="text-white font-bold flex items-center gap-2 text-lg">
-                      <div className="bg-blue-500 p-1.5 rounded text-white"><Key size={18} /></div>
+                      <div className="bg-blue-500 p-1.5 rounded-lg text-white shadow-lg shadow-blue-500/20"><Key size={18} /></div>
                       {t.investir.label_occupancy}
                     </label>
-                    <span className="text-blue-400 font-bold text-xl">{occupancy}%</span>
+                    <span className="text-blue-400 font-bold text-xl font-mono">{occupancy}%</span>
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={occupancy}
-                    onChange={(e) => setOccupancy(Number(e.target.value))}
-                    className="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 transition-all"
-                  />
-                  <div className="flex justify-between text-xs text-gray-400 mt-2 font-mono">
+                  <div className="relative h-12 flex items-center">
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={occupancy}
+                      onChange={(e) => setOccupancy(Number(e.target.value))}
+                      className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 transition-all z-10"
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-1 font-bold tracking-wide uppercase">
                     <span>{t.investir.label_occupancy_low} (30%)</span>
                     <span>{t.investir.label_occupancy_mid} (60%)</span>
                     <span>{t.investir.label_occupancy_high} (85%+)</span>
@@ -654,28 +638,30 @@ const InvestmentSimulator = () => {
                 <div>
                   <div className="flex justify-between items-center mb-4">
                     <label className="text-white font-bold flex items-center gap-2 text-lg">
-                      <div className="bg-green-500 p-1.5 rounded text-white"><Search size={18} /></div>
+                      <div className="bg-green-500 p-1.5 rounded-lg text-white shadow-lg shadow-green-500/20"><Search size={18} /></div>
                       {t.investir.label_rate}
                     </label>
-                    <span className="text-green-400 font-bold text-xl">{dailyRate} MAD</span>
+                    <span className="text-green-400 font-bold text-xl font-mono">{dailyRate} MAD</span>
                   </div>
-                  <input
-                    type="range"
-                    min="300"
-                    max="5000"
-                    step="50"
-                    value={dailyRate}
-                    onChange={(e) => setDailyRate(Number(e.target.value))}
-                    className="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-green-500 hover:accent-green-400 transition-all"
-                  />
-                  <div className="mt-4 relative">
+                  <div className="relative h-12 flex items-center">
+                    <input
+                      type="range"
+                      min="300"
+                      max="5000"
+                      step="50"
+                      value={dailyRate}
+                      onChange={(e) => setDailyRate(Number(e.target.value))}
+                      className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer accent-green-500 hover:accent-green-400 transition-all z-10"
+                    />
+                  </div>
+                  <div className="mt-1 relative">
                     <input
                       type="number"
                       value={dailyRate}
                       onChange={(e) => setDailyRate(Number(e.target.value))}
-                      className="w-full bg-slate-800/50 border border-slate-600 rounded-lg px-4 py-3 text-white focus:border-green-500 outline-none text-sm font-mono tracking-wide transition focus:bg-slate-800"
+                      className="w-full bg-slate-800/50 border border-slate-600/50 rounded-xl px-4 py-3 text-white focus:border-green-500 outline-none text-sm font-mono tracking-wide transition focus:bg-slate-800 focus:shadow-[0_0_15px_rgba(34,197,94,0.1)]"
                     />
-                    <span className="absolute right-4 top-3 text-gray-400 text-sm font-bold">MAD</span>
+                    <span className="absolute right-4 top-3 text-gray-500 text-xs font-bold uppercase tracking-wider">MAD</span>
                   </div>
                 </div>
 
@@ -683,21 +669,23 @@ const InvestmentSimulator = () => {
                 <div>
                   <div className="flex justify-between items-center mb-4">
                     <label className="text-white font-bold flex items-center gap-2 text-lg">
-                      <div className="bg-purple-500 p-1.5 rounded text-white"><Percent size={18} /></div>
+                      <div className="bg-purple-500 p-1.5 rounded-lg text-white shadow-lg shadow-purple-500/20"><Percent size={18} /></div>
                       {t.investir.label_fee}
                     </label>
-                    <span className="text-purple-400 font-bold text-xl">{feeRate}%</span>
+                    <span className="text-purple-400 font-bold text-xl font-mono">{feeRate}%</span>
                   </div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="50"
-                    step="1"
-                    value={feeRate}
-                    onChange={(e) => setFeeRate(Number(e.target.value))}
-                    className="w-full h-3 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-purple-500 hover:accent-purple-400 transition-all"
-                  />
-                  <div className="flex justify-between text-xs text-gray-400 mt-2 font-mono">
+                  <div className="relative h-12 flex items-center">
+                    <input
+                      type="range"
+                      min="0"
+                      max="50"
+                      step="1"
+                      value={feeRate}
+                      onChange={(e) => setFeeRate(Number(e.target.value))}
+                      className="w-full h-2 bg-slate-700/50 rounded-full appearance-none cursor-pointer accent-purple-500 hover:accent-purple-400 transition-all z-10"
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-1 font-bold tracking-wide uppercase">
                     <span>0%</span>
                     <span>20% (Nesty)</span>
                     <span>50%</span>
@@ -710,8 +698,8 @@ const InvestmentSimulator = () => {
           {/* Results Panel */}
           <div className="lg:col-span-5">
             <AnimatedSection delay={400} className="h-full">
-              <div className="bg-white rounded-2xl shadow-2xl p-8 text-nesty-dark relative overflow-hidden h-full flex flex-col justify-between">
-                <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-nesty-accent to-nesty-dark"></div>
+              <div className="bg-white rounded-2xl shadow-2xl p-8 text-nesty-dark relative overflow-hidden h-full flex flex-col justify-between border border-white/10">
+                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-nesty-accent via-teal-400 to-nesty-darker"></div>
 
                 <div>
                   <h3 className="text-2xl font-bold mb-8 flex items-center gap-3 text-nesty-darker">
@@ -719,16 +707,16 @@ const InvestmentSimulator = () => {
                   </h3>
 
                   <div className="space-y-6">
-                    <div className="bg-gray-50 p-5 rounded-xl border border-gray-100">
-                      <p className="text-sm text-gray-500 mb-1 font-semibold uppercase tracking-wide">{t.investir.res_gross}</p>
-                      <p className="text-3xl font-bold text-gray-800">{Math.round(grossRevenue).toLocaleString()} <span className="text-sm text-gray-400 font-normal">MAD</span></p>
+                    <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 shadow-sm">
+                      <p className="text-xs text-gray-400 mb-2 font-bold uppercase tracking-widest">{t.investir.res_gross}</p>
+                      <p className="text-4xl font-extrabold text-slate-800 tracking-tight">{Math.round(grossRevenue).toLocaleString()} <span className="text-sm text-gray-400 font-normal">MAD</span></p>
                     </div>
 
-                    <div className="flex justify-between items-center px-4 py-2 bg-red-50/50 rounded-lg border border-red-50">
-                      <div className="flex items-center gap-2 text-sm text-gray-600 font-medium">
-                        <Info size={16} className="text-red-400" /> {t.investir.res_commission} ({feeRate}%)
+                    <div className="flex justify-between items-center px-5 py-4 bg-red-50/50 rounded-xl border border-red-50">
+                      <div className="flex items-center gap-2 text-sm text-red-600 font-bold">
+                        <Info size={16} /> {t.investir.res_commission} ({feeRate}%)
                       </div>
-                      <div className="text-red-500 font-bold">
+                      <div className="text-red-500 font-mono font-bold">
                         - {Math.round(managementFee).toLocaleString()} MAD
                       </div>
                     </div>
@@ -738,17 +726,22 @@ const InvestmentSimulator = () => {
                 <div>
                   <div className="border-t border-dashed border-gray-200 my-8"></div>
 
-                  <div className="bg-nesty-darker text-white p-8 rounded-2xl text-center shadow-lg transform hover:scale-[1.02] transition duration-300 relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-nesty-accent/10 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                    <p className="text-nesty-accent text-xs uppercase tracking-[0.2em] font-bold mb-2">{t.investir.res_net}</p>
-                    <p className="text-4xl md:text-5xl font-bold text-white mb-2 tracking-tight">{Math.round(netRevenue).toLocaleString()}</p>
-                    <p className="text-sm text-gray-400">Dirhams Marocains</p>
-                    <div className="inline-block bg-white/10 backdrop-blur rounded-full px-4 py-1.5 mt-4 border border-white/10">
-                      <span className="text-nesty-accent font-bold text-sm">{t.investir.res_roi}: {roi.toFixed(1)}%</span>
+                  <div className="bg-nesty-darker text-white p-8 rounded-2xl text-center shadow-xl shadow-nesty-darker/20 transform hover:-translate-y-1 transition duration-500 relative overflow-hidden group">
+                    {/* Abstract Shapes */}
+                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-nesty-accent/10 rounded-full blur-2xl group-hover:bg-nesty-accent/20 transition duration-700"></div>
+                    <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition duration-700"></div>
+
+                    <p className="text-nesty-accent text-xs uppercase tracking-[0.2em] font-extrabold mb-3 relative z-10">{t.investir.res_net}</p>
+                    <p className="text-5xl md:text-6xl font-black text-white mb-2 tracking-tighter relative z-10">{Math.round(netRevenue).toLocaleString()}</p>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Dirhams Marocains / an</p>
+
+                    <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md rounded-full px-5 py-2 mt-6 border border-white/10 hover:bg-white/20 transition relative z-10">
+                      <TrendingUp size={16} className="text-nesty-accent" />
+                      <span className="text-white font-bold text-sm">{t.investir.res_roi}: <span className="text-nesty-accent">{roi.toFixed(1)}%</span></span>
                     </div>
                   </div>
 
-                  <p className="text-[10px] text-center text-gray-400 mt-6 leading-relaxed">
+                  <p className="text-[10px] text-center text-gray-400 mt-6 leading-relaxed max-w-xs mx-auto">
                     {t.investir.res_disclaimer}
                   </p>
                 </div>
@@ -845,20 +838,43 @@ const Investir: React.FC = () => {
         title={t.investir.meta_title}
         description={t.investir.meta_desc}
       />
-      <section className="bg-nesty-darker text-white py-24 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={investHero}
+            alt="Investir Agadir Real Estate"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-nesty-darker/90 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-nesty-darker via-transparent to-transparent opacity-80"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 w-full mt-16">
           <AnimatedSection>
-            <span className="inline-block py-1 px-3 rounded-full bg-nesty-accent/20 text-nesty-accent text-sm font-bold mb-4 border border-nesty-accent/50">
+            <span className="inline-block py-1 px-3 rounded-full bg-nesty-accent/20 text-nesty-accent text-sm font-bold mb-4 border border-nesty-accent/50 backdrop-blur-sm">
               {t.investir.badge}
             </span>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">{t.investir.hero_title} <span className="text-nesty-accent">{t.investir.hero_title_span}</span> {t.investir.hero_suffix}</h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white leading-tight">
+              {t.investir.hero_title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-nesty-accent to-teal-200">{t.investir.hero_title_span}</span> {t.investir.hero_suffix}
+            </h1>
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto mb-10 font-medium">
               {t.investir.hero_desc}
             </p>
-            <Link to="/contact" className="px-8 py-4 bg-nesty-accent text-nesty-darker font-bold rounded-full hover:bg-nesty-accentDark hover:text-white transition shadow-lg shadow-teal-500/20">
-              {t.investir.cta_start}
-            </Link>
+
+            {/* Simulator CTA */}
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <button
+                onClick={() => document.getElementById('simulator')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-8 py-4 bg-white text-nesty-darker font-bold rounded-full hover:bg-gray-100 transition inline-flex items-center gap-2 shadow-lg"
+              >
+                <Calculator size={20} className="text-nesty-accent" />
+                Simuler mon ROI
+              </button>
+              <Link to="/contact" className="px-8 py-4 bg-nesty-accent text-nesty-darker font-bold rounded-full hover:bg-white hover:text-nesty-accentDark transition inline-flex items-center gap-2 shadow-[0_4px_20px_rgba(45,212,191,0.4)]">
+                {t.investir.cta_start} <ArrowRight size={20} />
+              </Link>
+            </div>
           </AnimatedSection>
         </div>
       </section>
@@ -980,27 +996,30 @@ const Investir: React.FC = () => {
                 <AnimatedSection delay={300} className="h-full">
                   <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-1 p-1 bg-white">
                     {/* Before Image */}
-                    <div className="relative w-full h-full group">
-                      <img src="https://picsum.photos/id/1031/600/600" className="w-full h-full object-cover" alt="Before" />
-                      <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded border border-white/20 z-10">
+                    <div className="relative w-full h-full group overflow-hidden">
+                      <img src={investCsBefore} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Avant" />
+                      <div className="absolute top-3 left-3 bg-red-500/90 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded shadow-lg z-10 uppercase tracking-wider">
                         {t.investir.cs_before}
                       </div>
                     </div>
 
                     {/* After Image */}
-                    <div className="relative w-full h-full group">
-                      <img src="https://picsum.photos/id/1040/600/600" className="w-full h-full object-cover" alt="After" />
-                      <div className="absolute top-3 left-3 bg-nesty-accent text-nesty-darker text-xs font-bold px-3 py-1 rounded shadow-lg border border-white/20 z-10">
+                    <div className="relative w-full h-full group overflow-hidden">
+                      <img src={investCsAfter} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Après" />
+                      <div className="absolute top-3 left-3 bg-nesty-accent text-nesty-darker text-xs font-bold px-3 py-1 rounded shadow-lg border border-white/20 z-10 uppercase tracking-wider">
                         {t.investir.cs_after}
                       </div>
                     </div>
 
-                    <img src="https://picsum.photos/id/1069/600/600" className="w-full h-full object-cover" alt="Interior" />
-                    <div className="relative">
-                      <img src="https://picsum.photos/id/43/600/600" className="w-full h-full object-cover grayscale" alt="Analytics" />
-                      <div className="absolute inset-0 bg-nesty-accent/80 flex flex-col items-center justify-center text-white p-6 text-center">
-                        <span className="text-3xl font-bold mb-2">Iken Park</span>
-                        <span className="uppercase tracking-widest text-sm">Success Story</span>
+                    <div className="relative overflow-hidden w-full h-full">
+                      <img src={investCsDetail} className="w-full h-full object-cover hover:scale-110 transition duration-700" alt="Détail" />
+                    </div>
+
+                    <div className="relative overflow-hidden group w-full h-full">
+                      <img src={investCsIken} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 delay-100" alt="Iken Park" />
+                      <div className="absolute inset-0 bg-nesty-accent/80 group-hover:bg-nesty-accent/60 transition duration-300 flex flex-col items-center justify-center text-white p-6 text-center backdrop-blur-sm">
+                        <span className="text-3xl font-extrabold mb-2 text-white">Iken Park</span>
+                        <span className="uppercase tracking-[0.2em] text-xs font-bold border-t border-white/30 pt-2 mt-1">Success Story</span>
                       </div>
                     </div>
                   </div>

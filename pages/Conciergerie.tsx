@@ -5,17 +5,19 @@ import { CheckCircle, Camera, BarChart3, MessageCircle, Clock, Sparkles, Wrench,
 import { SectionHeader, AnimatedSection } from '@/components/common';
 import { SEO } from '@/components/layout';
 import { useLanguage } from '../context/LanguageContext';
+import conciergeHero from '@/assets/images/concierge-hero.png';
+import conciergeFeature from '@/assets/images/concierge-feature.png';
 
 const ServiceItem = ({ icon: Icon, title, description }: { icon: any, title: string, description: string }) => (
-  <div className="flex gap-4 p-6 bg-white rounded-xl shadow-sm hover:shadow-lg transition border border-gray-100 hover:border-nesty-accent/30 group h-full">
+  <div className="flex gap-4 p-6 bg-white rounded-2xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_-5px_rgba(45,212,191,0.15)] transition-all duration-300 border border-gray-100 hover:border-nesty-accent/40 group h-full hover:-translate-y-1">
     <div className="flex-shrink-0">
-      <div className="w-12 h-12 bg-teal-50 text-nesty-accent rounded-full flex items-center justify-center group-hover:bg-nesty-accent group-hover:text-white group-hover:scale-110 transition duration-300 transform">
+      <div className="w-12 h-12 bg-teal-50 text-nesty-accent rounded-2xl flex items-center justify-center group-hover:bg-nesty-accent group-hover:text-white group-hover:scale-110 transition duration-300 transform shadow-sm">
         <Icon size={24} />
       </div>
     </div>
     <div>
       <h3 className="text-lg font-bold text-nesty-dark mb-2 group-hover:text-nesty-accent transition">{title}</h3>
-      <p className="text-gray-600 text-sm leading-relaxed">{description}</p>
+      <p className="text-gray-500 text-sm leading-relaxed">{description}</p>
     </div>
   </div>
 );
@@ -30,15 +32,34 @@ const Conciergerie: React.FC = () => {
         description={t.conciergerie.meta_desc}
       />
       {/* Hero Section */}
-      <section className="bg-nesty-darker text-white py-24 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-teal-900/20 to-transparent"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={conciergeHero}
+            alt="Conciergerie Nesty Agadir"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-nesty-darker/80 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-nesty-darker to-transparent opacity-90"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 w-full mt-16">
           <AnimatedSection>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">{t.conciergerie.hero_title} <span className="text-nesty-accent">{t.conciergerie.hero_title_span}</span></h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white leading-tight">
+              {t.conciergerie.hero_title} <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-nesty-accent to-teal-200">
+                {t.conciergerie.hero_title_span}
+              </span>
+            </h1>
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto mb-10 font-medium">
               {t.conciergerie.hero_desc}
             </p>
-            <Link to="/contact" className="px-8 py-4 bg-nesty-accent text-nesty-darker font-bold rounded-full hover:bg-nesty-accentDark hover:text-white transition inline-flex items-center gap-2 shadow-lg shadow-teal-500/20">
+            <Link
+              to="/contact"
+              state={{ subject: 'Estimation' }}
+              className="px-8 py-4 bg-nesty-accent text-nesty-darker font-bold rounded-full hover:bg-white hover:text-nesty-accentDark transition inline-flex items-center gap-2 shadow-[0_4px_20px_rgba(45,212,191,0.4)] transform hover:-translate-y-1"
+            >
               {t.conciergerie.cta_estimate} <ArrowRight size={20} />
             </Link>
           </AnimatedSection>
@@ -113,16 +134,20 @@ const Conciergerie: React.FC = () => {
             <div className="lg:w-1/3 relative">
               <div className="sticky top-24 space-y-8">
                 <AnimatedSection delay={500}>
-                  <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[300px]">
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[400px] border border-white/20 group">
                     <img
-                      src="https://picsum.photos/id/1053/600/800"
-                      alt="Intérieur cozy"
-                      className="object-cover h-full w-full"
+                      src={conciergeFeature}
+                      alt="Appartement Marina Agadir"
+                      className="object-cover h-full w-full transform group-hover:scale-110 transition duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-nesty-darker/90 via-transparent to-transparent"></div>
                     <div className="absolute bottom-6 left-6 right-6 text-white">
-                      <p className="font-bold text-lg">Appartement Marina</p>
-                      <p className="text-sm text-gray-200">Géré par Nesty depuis 2020</p>
+                      <div className="bg-nesty-accent/90 backdrop-blur-sm text-nesty-darker text-xs font-bold px-3 py-1 rounded-full inline-block mb-3">MARINA D'AGADIR</div>
+                      <p className="font-bold text-xl mb-1">Appartement Vue Mer</p>
+                      <p className="text-sm text-gray-300 flex items-center gap-2">
+                        <CheckCircle size={14} className="text-nesty-accent" />
+                        Géré par Nesty depuis 2020
+                      </p>
                     </div>
                   </div>
                 </AnimatedSection>

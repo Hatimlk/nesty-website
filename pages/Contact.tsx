@@ -6,6 +6,7 @@ import { SectionHeader, AnimatedSection } from '@/components/common';
 import { SEO } from '@/components/layout';
 import { useLanguage } from '../context/LanguageContext';
 import { useData } from '../context/DataContext';
+import contactOffice from '@/assets/images/contact-office.png';
 
 interface FaqItemProps {
   question: string;
@@ -40,13 +41,13 @@ const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
 };
 
 const ContactInfoCard = ({ icon: Icon, title, content }: any) => (
-  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-start gap-4 h-full hover:shadow-md transition-shadow duration-300">
-    <div className="bg-nesty-darker text-white p-3 rounded-full flex-shrink-0">
-      <Icon size={24} />
+  <div className="bg-white rounded-2xl p-8 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] border border-gray-100 flex flex-col items-center text-center gap-4 h-full hover:shadow-xl hover:translate-y-[-4px] transition-all duration-300 group">
+    <div className="bg-nesty-accent/10 text-nesty-accent p-4 rounded-2xl group-hover:bg-nesty-accent group-hover:text-white transition-colors duration-300">
+      <Icon size={32} />
     </div>
     <div>
-      <h3 className="text-gray-500 text-sm font-semibold mb-1 uppercase tracking-wide">{title}</h3>
-      <p className="text-nesty-dark font-bold text-lg">{content}</p>
+      <h3 className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-2">{title}</h3>
+      <p className="text-nesty-dark font-bold text-xl group-hover:text-nesty-accent transition-colors">{content}</p>
     </div>
   </div>
 );
@@ -62,7 +63,12 @@ const LocationCard = ({ title, address, phone, directionsText }: any) => (
       <Phone size={16} className="text-nesty-accent" /> {phone}
     </div>
 
-    <a href="#" className="flex items-center gap-2 text-sm font-bold text-nesty-dark group-hover:text-nesty-accent transition">
+    <a
+      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address + ", Agadir, Maroc")}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-2 text-sm font-bold text-nesty-dark group-hover:text-nesty-accent transition"
+    >
       {directionsText} <div className="bg-nesty-accent text-white rounded-full p-1"><ArrowUpRight size={12} /></div>
     </a>
   </div>
@@ -85,15 +91,22 @@ const Contact: React.FC = () => {
   const [lastSubmittedEmail, setLastSubmittedEmail] = useState('');
 
   useEffect(() => {
-    if (location.state && location.state.propertyTitle) {
-      const { propertyTitle, propertyId } = location.state;
-      const propertyLink = `${window.location.origin}/#/investir?ref=${propertyId}`;
+    if (location.state) {
+      if (location.state.propertyTitle) {
+        const { propertyTitle, propertyId } = location.state;
+        const propertyLink = `${window.location.origin}/#/investir?ref=${propertyId}`;
 
-      setFormData(prev => ({
-        ...prev,
-        subject: t.contact.opt_investment,
-        message: `Je suis intéressé par le bien : ${propertyTitle}.\n(Réf: #${propertyId})\nLien: ${propertyLink}\n\nPouvez-vous me donner plus d'informations ?`
-      }));
+        setFormData(prev => ({
+          ...prev,
+          subject: t.contact.opt_investment,
+          message: `Je suis intéressé par le bien : ${propertyTitle}.\n(Réf: #${propertyId})\nLien: ${propertyLink}\n\nPouvez-vous me donner plus d'informations ?`
+        }));
+      } else if (location.state.subject) {
+        setFormData(prev => ({
+          ...prev,
+          subject: location.state.subject
+        }));
+      }
     }
   }, [location.state, t.contact.opt_investment]);
 
@@ -116,11 +129,38 @@ const Contact: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8Kt5c_leH4Y0twHnArz73RA_6F-H-E9TwH3MoSDPRIn1WG2PQCicjirMyZpaXlET-0A/exec";
+
+  const submitToGoogleSheets = async (data: any) => {
+    if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("YOUR_GOOGLE_SCRIPT")) {
+      console.warn("Google Sheet URL not configured");
+      return;
+    }
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain", // Safer for no-cors
+        },
+        body: JSON.stringify(data),
+      });
+      console.log("Sent to Google Sheets");
+    } catch (error) {
+      console.error("Error sending to Google Sheets", error);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validate()) {
-      // Send email using EmailJS
+      // 1. Send to Google Sheets (Fire and forget to avoid blocking UI)
+      submitToGoogleSheets(formData);
+
+      // 2. Send email using EmailJS
       const serviceId = 'service_gprqx1q';
       const templateId = 'template_6w49wws';
       const publicKey = 'rPo0asx1wnj_QgqKG';
@@ -330,13 +370,20 @@ const Contact: React.FC = () => {
             </div>
 
             {/* Right: Image */}
-            <div className="hidden lg:block relative h-full min-h-[600px]">
+            <div className="hidden lg:block relative h-full min-h-[600px] overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1577412647305-991150c7d163?q=80&w=1932&auto=format&fit=crop"
+                src={contactOffice}
                 alt="Nesty Office Meeting"
-                className="absolute inset-0 w-full h-full object-cover transform hover:scale-105 transition-transform duration-[2s]"
+                className="absolute inset-0 w-full h-full object-cover transform hover:scale-110 transition-transform duration-[20s]"
               />
-              <div className="absolute inset-0 bg-nesty-darker/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-nesty-darker/60 to-transparent"></div>
+
+              <div className="absolute bottom-10 left-10 right-10 text-white">
+                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20">
+                  <p className="font-bold text-lg mb-2">"L'immobilier, c'est avant tout une relation de confiance."</p>
+                  <p className="text-sm opacity-80 uppercase tracking-widest font-bold">- L'équipe Nesty</p>
+                </div>
+              </div>
             </div>
           </div>
         </AnimatedSection>

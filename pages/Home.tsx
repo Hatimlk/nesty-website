@@ -5,6 +5,11 @@ import { ArrowRight, TrendingUp, Users, Star, Home as HomeIcon, Key, Briefcase, 
 import { SectionHeader, AnimatedSection, TestimonialCarousel } from '@/components/common';
 import { SEO } from '@/components/layout';
 import { useLanguage } from '../context/LanguageContext';
+import heroBg from '@/assets/images/hero-bg.png';
+import serviceConcierge from '@/assets/images/service-concierge.png';
+import serviceInvest from '@/assets/images/service-invest.png';
+import serviceConsulting from '@/assets/images/service-consulting.png';
+import homeTeam from '@/assets/images/home-team.png';
 
 const Counter = ({ end, duration = 2000, suffix = "", prefix = "", decimals = 0 }: { end: number, duration?: number, suffix?: string, prefix?: string, decimals?: number }) => {
   const [count, setCount] = useState(0);
@@ -59,12 +64,13 @@ const Home: React.FC = () => {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=2070&auto=format&fit=crop"
+            src={heroBg}
             alt="Agadir Taghazout Bay Residence Luxury View"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover animate-fade-in scale-105"
           />
-          {/* Darker Gradient overlay for better text contrast - Tuned for Teal Theme */}
-          <div className="absolute inset-0 bg-gradient-to-b from-nesty-darker/90 via-nesty-darker/40 to-nesty-darker/80"></div>
+          {/* Enhanced Gradient overlay for better text contrast and depth */}
+          <div className="absolute inset-0 bg-gradient-to-b from-nesty-darker/80 via-nesty-darker/20 to-nesty-darker/90 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-black/10"></div>
         </div>
 
         {/* Content */}
@@ -97,10 +103,10 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-        {/* Floating Stats Bar */}
-        <div className="absolute bottom-0 w-full z-20 transform translate-y-1/2 px-4 hidden md:block">
+        {/* Floating Stats Bar - Made Responsive */}
+        <div className="absolute bottom-0 w-full z-20 transform translate-y-1/2 px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="bg-white rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.3)] p-8 grid grid-cols-4 divide-x divide-gray-100 border border-gray-100">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] p-8 grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-y-0 md:divide-x divide-gray-100 border border-gray-100/50">
               <div className="text-center group cursor-default">
                 <div className="text-4xl font-bold text-nesty-dark mb-1 group-hover:text-nesty-accent transition-colors duration-300">
                   <Counter end={50} prefix="+" suffix="%" />
@@ -131,7 +137,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Spacer for overlapping stats bar */}
-      <div className="h-24 bg-white hidden md:block"></div>
+      <div className="h-40 md:h-24 bg-white"></div>
 
       {/* WHY NESTY SECTION */}
       <section className="py-20 bg-white">
@@ -142,7 +148,7 @@ const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <AnimatedSection delay={100} className="h-full">
-              <div className="p-8 rounded-2xl bg-slate-50 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 text-center group h-full">
+              <div className="p-8 rounded-3xl bg-white hover:bg-white hover:shadow-[0_20px_40px_-10px_rgba(45,212,191,0.1)] transition-all duration-500 border border-gray-100/80 hover:border-nesty-accent/30 text-center group h-full">
                 <div className="w-16 h-16 mx-auto bg-nesty-light rounded-full flex items-center justify-center mb-6 group-hover:bg-nesty-accent group-hover:text-white transition duration-300 border border-nesty-accent/20">
                   <TrendingUp className="text-nesty-accent group-hover:text-white transition" size={32} />
                 </div>
@@ -154,7 +160,7 @@ const Home: React.FC = () => {
             </AnimatedSection>
 
             <AnimatedSection delay={200} className="h-full">
-              <div className="p-8 rounded-2xl bg-slate-50 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 text-center group h-full">
+              <div className="p-8 rounded-3xl bg-white hover:bg-white hover:shadow-[0_20px_40px_-10px_rgba(45,212,191,0.1)] transition-all duration-500 border border-gray-100/80 hover:border-nesty-accent/30 text-center group h-full">
                 <div className="w-16 h-16 mx-auto bg-nesty-light rounded-full flex items-center justify-center mb-6 group-hover:bg-nesty-accent group-hover:text-white transition duration-300 border border-nesty-accent/20">
                   <Star className="text-nesty-accent group-hover:text-white transition" size={32} />
                 </div>
@@ -166,7 +172,7 @@ const Home: React.FC = () => {
             </AnimatedSection>
 
             <AnimatedSection delay={300} className="h-full">
-              <div className="p-8 rounded-2xl bg-slate-50 hover:bg-white hover:shadow-xl transition duration-300 border border-slate-100 text-center group h-full">
+              <div className="p-8 rounded-3xl bg-white hover:bg-white hover:shadow-[0_20px_40px_-10px_rgba(45,212,191,0.1)] transition-all duration-500 border border-gray-100/80 hover:border-nesty-accent/30 text-center group h-full">
                 <div className="w-16 h-16 mx-auto bg-nesty-light rounded-full flex items-center justify-center mb-6 group-hover:bg-nesty-accent group-hover:text-white transition duration-300 border border-nesty-accent/20">
                   <ShieldCheck className="text-nesty-accent group-hover:text-white transition" size={32} />
                 </div>
@@ -195,8 +201,9 @@ const Home: React.FC = () => {
             {/* Service 1 */}
             <AnimatedSection delay={100}>
               <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-nesty-accent/50 transition duration-500 flex flex-col hover:shadow-[0_0_30px_rgba(45,212,191,0.15)] h-full">
-                <div className="h-48 overflow-hidden">
-                  <img src="https://picsum.photos/id/1031/600/400" alt="Conciergerie" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700" />
+                <div className="h-56 overflow-hidden relative">
+                  <div className="absolute inset-0 bg-nesty-darker/20 group-hover:bg-transparent transition duration-500 z-10"></div>
+                  <img src={serviceConcierge} alt="Conciergerie" className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
                 </div>
                 <div className="p-8 flex-grow relative">
                   <div className="absolute top-0 right-0 -mt-6 mr-6 w-12 h-12 bg-nesty-accent rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition duration-300">
@@ -218,8 +225,9 @@ const Home: React.FC = () => {
             {/* Service 2 */}
             <AnimatedSection delay={200}>
               <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-nesty-accent/50 transition duration-500 flex flex-col hover:shadow-[0_0_30px_rgba(45,212,191,0.15)] h-full">
-                <div className="h-48 overflow-hidden">
-                  <img src="https://picsum.photos/id/1076/600/400" alt="Investissement" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700" />
+                <div className="h-56 overflow-hidden relative">
+                  <div className="absolute inset-0 bg-nesty-darker/20 group-hover:bg-transparent transition duration-500 z-10"></div>
+                  <img src={serviceInvest} alt="Investissement" className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
                 </div>
                 <div className="p-8 flex-grow relative">
                   <div className="absolute top-0 right-0 -mt-6 mr-6 w-12 h-12 bg-nesty-accent rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition duration-300">
@@ -241,8 +249,9 @@ const Home: React.FC = () => {
             {/* Service 3 */}
             <AnimatedSection delay={300}>
               <div className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-nesty-accent/50 transition duration-500 flex flex-col hover:shadow-[0_0_30px_rgba(45,212,191,0.15)] h-full">
-                <div className="h-48 overflow-hidden">
-                  <img src="https://picsum.photos/id/445/600/400" alt="Conseil" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-700" />
+                <div className="h-56 overflow-hidden relative">
+                  <div className="absolute inset-0 bg-nesty-darker/20 group-hover:bg-transparent transition duration-500 z-10"></div>
+                  <img src={serviceConsulting} alt="Conseil" className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
                 </div>
                 <div className="p-8 flex-grow relative">
                   <div className="absolute top-0 right-0 -mt-6 mr-6 w-12 h-12 bg-nesty-accent rounded-full flex items-center justify-center shadow-lg group-hover:rotate-12 transition duration-300">
@@ -270,7 +279,9 @@ const Home: React.FC = () => {
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="lg:w-1/2">
               <AnimatedSection className="relative group">
-                <img src="https://picsum.photos/id/101/600/600" alt="Équipe Nesty" className="rounded-2xl shadow-2xl z-10 relative grayscale group-hover:grayscale-0 transition duration-500" />
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl z-10">
+                  <img src={homeTeam} alt="Équipe Nesty" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700 transform group-hover:scale-105" />
+                </div>
                 <div className="absolute -bottom-6 -right-6 w-full h-full bg-nesty-dark rounded-2xl -z-0"></div>
                 <div className="absolute -top-6 -left-6 w-32 h-32 bg-nesty-accent/20 rounded-full -z-0 blur-xl"></div>
               </AnimatedSection>
