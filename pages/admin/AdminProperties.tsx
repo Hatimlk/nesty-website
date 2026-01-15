@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useData } from '@/context/DataContext';
 import { Property } from '@/types';
-import { Plus, Trash2, Edit, X, Save, Image as ImageIcon, Search, MapPin, Filter, MoreHorizontal, BedDouble, Ruler, Check } from 'lucide-react';
+import { uploadImage } from '@/utils/storageUtils';
+import { Plus, Trash2, Edit, X, Save, Image as ImageIcon, Search, MapPin, Filter, Loader2, BedDouble, Ruler, Check } from 'lucide-react';
 
 const AdminProperties: React.FC = () => {
    const { properties, addProperty, deleteProperty, updateProperty, isLoading } = useData();
@@ -9,6 +10,10 @@ const AdminProperties: React.FC = () => {
    const [editingId, setEditingId] = useState<string | number | null>(null);
    const [searchTerm, setSearchTerm] = useState('');
    const [locationFilter, setLocationFilter] = useState('All');
+
+   // Upload state
+   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+   const [isUploading, setIsUploading] = useState(false);
 
    if (isLoading) {
       return (
@@ -42,35 +47,66 @@ const AdminProperties: React.FC = () => {
    const handleEdit = (prop: Property) => {
       setFormData(prop);
       setEditingId(prop.id);
+      setSelectedFile(null); // Reset file
       setIsModalOpen(true);
    };
 
    const handleAddNew = () => {
       setFormData(initialFormState);
       setEditingId(null);
+      setSelectedFile(null);
       setIsModalOpen(true);
    };
 
-   const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      // Auto-generate display strings if empty
-      const processedData = {
-         ...formData,
-         displayPrice: formData.displayPrice || `${formData.rawPrice.toLocaleString()} MAD`,
-         specs: {
-            ...formData.specs,
-            roomsDisplay: formData.specs.roomsDisplay || `${formData.specs.rooms} Chambre${formData.specs.rooms > 1 ? 's' : ''}`,
-            roi: formData.specs.roi || "~8% Rentabilité"
-         },
-         image: formData.image || "https://picsum.photos/800/600"
-      };
-
-      if (editingId) {
-         updateProperty(editingId, processedData);
-      } else {
-         addProperty(processedData);
+   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files[0]) {
+         const file = e.target.files[0];
+         setSelectedFile(file);
+         // Create local preview
+         const previewUrl = URL.createObjectURL(file);
+         setFormData({ ...formData, image: previewUrl });
       }
-      setIsModalOpen(false);
+   };
+
+   const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      try {
+         setIsUploading(true);
+         let imageUrl = formData.image;
+
+         // Upload if new file selected
+         if (selectedFile) {
+            const path = editingId ? `properties/${editingId}` : `properties/new_${Date.now()}`;
+            imageUrl = await uploadImage(selectedFile, path);
+         } else if (!imageUrl) {
+            // Fallback if no image provided at all
+            imageUrl = "https://picsum.photos/800/600";
+         }
+
+         const processedData = {
+            ...formData,
+            image: imageUrl,
+            displayPrice: formData.displayPrice || `${formData.rawPrice.toLocaleString()} MAD`,
+            specs: {
+               ...formData.specs,
+               roomsDisplay: formData.specs.roomsDisplay || `${formData.specs.rooms} Chambre${formData.specs.rooms > 1 ? 's' : ''}`,
+               roi: formData.specs.roi || "~8% Rentabilité"
+            },
+         };
+
+         if (editingId) {
+            await updateProperty(editingId, processedData);
+         } else {
+            await addProperty(processedData);
+         }
+         setIsModalOpen(false);
+      } catch (error) {
+         console.error("Failed to save property", error);
+         alert("Erreur lors de l'enregistrement. Vérifiez votre connexion ou vos droits d'accès.");
+      } finally {
+         setIsUploading(false);
+      }
    };
 
    const handleAmenitiesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -316,15 +352,24 @@ const AdminProperties: React.FC = () => {
                            </div>
 
                            <div>
-                              <label className="block text-sm font-bold text-gray-700 mb-2">Image Principale (URL)</label>
+                              <label className="block text-sm font-bold text-gray-700 mb-2">Image Principale</label>
                               <div className="flex gap-2">
                                  <div className="relative flex-grow">
                                     <ImageIcon size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                                    <input type="text" placeholder="https://..." className="w-full pl-10 pr-4 p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-nesty-accent/10 focus:border-nesty-accent focus:bg-white outline-none transition-all font-mono text-sm" value={formData.image} onChange={e => setFormData({ ...formData, image: e.target.value })} />
+                                    {/* Switched to File Input */}
+                                    <input
+                                       type="file"
+                                       accept="image/*"
+                                       onChange={handleFileChange}
+                                       className="w-full pl-10 pr-4 p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-4 focus:ring-nesty-accent/10 focus:border-nesty-accent focus:bg-white outline-none transition-all font-mono text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-nesty-accent/10 file:text-nesty-dark hover:file:bg-nesty-accent/20 cursor-pointer"
+                                    />
                                  </div>
                               </div>
+                              <div className="mt-2 text-xs text-gray-400 flex items-center gap-1">
+                                 <span className="font-bold text-nesty-dark">Note:</span> L'image sera téléchargée lors de l'enregistrement.
+                              </div>
 
-                              {formData.image && (
+                              {(formData.image || selectedFile) && (
                                  <div className="mt-4 h-48 rounded-2xl overflow-hidden border border-gray-200 relative shadow-sm group">
                                     <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
                                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4">
@@ -362,8 +407,14 @@ const AdminProperties: React.FC = () => {
 
                   <div className="p-6 border-t border-gray-100 bg-gray-50/50 backdrop-blur-sm flex justify-end gap-3 z-10">
                      <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-3 text-gray-600 font-bold hover:bg-white hover:text-red-500 hover:shadow-sm rounded-xl transition border border-transparent hover:border-gray-100">Annuler</button>
-                     <button type="submit" form="propertyForm" className="px-8 py-3 bg-nesty-darker text-white font-bold rounded-xl hover:bg-nesty-accent hover:text-nesty-darker transition flex items-center gap-2 shadow-xl shadow-nesty-darker/10 transform hover:-translate-y-0.5">
-                        <Save size={18} /> Enregistrer le bien
+                     <button
+                        type="submit"
+                        form="propertyForm"
+                        disabled={isUploading}
+                        className={`px-8 py-3 bg-nesty-darker text-white font-bold rounded-xl hover:bg-nesty-accent hover:text-nesty-darker transition flex items-center gap-2 shadow-xl shadow-nesty-darker/10 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-wait`}
+                     >
+                        {isUploading ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+                        {isUploading ? 'Chargement...' : 'Enregistrer le bien'}
                      </button>
                   </div>
                </div>

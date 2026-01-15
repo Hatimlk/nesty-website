@@ -50,7 +50,7 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true); // Removed in favor of derived state
   const [properties, setProperties] = useState<Property[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -106,11 +106,21 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     migrateData();
   }, []);
 
+  // Separate loading states
+  const [loadingProps, setLoadingProps] = useState(true);
+  const [loadingMsgs, setLoadingMsgs] = useState(true);
+
+  // Derived global loading
+  const isLoading = loadingProps && loadingMsgs;
+
   // Subscriptions
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'properties'), (snap) => {
       setProperties(snap.docs.map(d => ({ ...d.data(), id: d.id } as Property)));
-      setIsLoading(false); // Set loading to false once properties are loaded
+      setLoadingProps(false);
+    }, (err) => {
+      console.error("Properties subscription error:", err);
+      setLoadingProps(false); // Fail safe
     });
     return unsub;
   }, []);
@@ -125,6 +135,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'messages'), (snap) => {
       setMessages(snap.docs.map(d => ({ ...d.data(), id: d.id } as Message)));
+      setLoadingMsgs(false);
+    }, (err) => {
+      console.error("Messages subscription error:", err);
+      setLoadingMsgs(false);
     });
     return unsub;
   }, []);
@@ -140,18 +154,34 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 
   // Actions
+  // Actions
   const addProperty = async (property: Property) => {
-    const { id, ...data } = property; // Ensure no ID is sent if it exists
-    await addDoc(collection(db, 'properties'), data);
+    try {
+      const { id, ...data } = property; // Ensure no ID is sent if it exists
+      await addDoc(collection(db, 'properties'), data);
+    } catch (error) {
+      console.error("Error adding property: ", error);
+      throw error;
+    }
   };
 
   const updateProperty = async (id: string | number, updatedProperty: Property) => {
-    const { id: _, ...data } = updatedProperty;
-    await updateDoc(doc(db, 'properties', String(id)), data);
+    try {
+      const { id: _, ...data } = updatedProperty;
+      await updateDoc(doc(db, 'properties', String(id)), data);
+    } catch (error) {
+      console.error("Error updating property: ", error);
+      throw error;
+    }
   };
 
   const deleteProperty = async (id: string | number) => {
-    await deleteDoc(doc(db, 'properties', String(id)));
+    try {
+      await deleteDoc(doc(db, 'properties', String(id)));
+    } catch (error) {
+      console.error("Error deleting property: ", error);
+      throw error;
+    }
   };
 
   const addMessage = async (msg: Omit<Message, 'id' | 'date' | 'read'>) => {

@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,5 +15,36 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+
+// Enable offline persistence
+enableIndexedDbPersistence(db).catch((err) => {
+    if (err.code == 'failed-precondition') {
+        // Multiple tabs open, persistence can only be enabled in one tab at a a time.
+        console.warn('Firebase persistence failed: multiple tabs open');
+    } else if (err.code == 'unimplemented') {
+        // The current browser does not support all of the features required to enable persistence
+        console.warn('Firebase persistence not supported');
+    }
+});
+
 export const auth = getAuth(app);
+export const storage = getStorage(app);
+
+// Initialize App Check (only if key is provided)
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+
+if (import.meta.env.VITE_RECAPTCHA_SITE_KEY) {
+    if (window.location.hostname === "localhost") {
+        // @ts-ignore
+        self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    }
+
+    initializeAppCheck(app, {
+        provider: new ReCaptchaV3Provider(import.meta.env.VITE_RECAPTCHA_SITE_KEY),
+        isTokenAutoRefreshEnabled: true
+    });
+} else {
+    console.warn("App Check not initialized: VITE_RECAPTCHA_SITE_KEY missing");
+}
+
 export default app;
