@@ -1,5 +1,5 @@
 export interface Property {
-  id: number;
+  id: string | number;
   image: string;
   images: string[];
   title: string;
@@ -19,7 +19,7 @@ export interface Property {
 }
 
 export interface Testimonial {
-  id: number;
+  id: string | number;
   name: string;
   role: string;
   content: string;
@@ -28,7 +28,7 @@ export interface Testimonial {
 }
 
 export interface Message {
-  id: number;
+  id: string | number;
   name: string;
   email: string;
   phone: string;

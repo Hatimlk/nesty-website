@@ -1,4 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  getDocs,
+  setDoc
+} from 'firebase/firestore';
+import { db } from '@/utils/firebase';
 import { Property, Testimonial, Message } from '../types';
 
 export interface AdminProfile {
@@ -13,184 +24,159 @@ export interface AdminProfile {
   };
 }
 
-// Initial Mock Data
-const INITIAL_PROPERTIES: Property[] = [
-  {
-    id: 1,
-    image: "https://picsum.photos/id/164/800/600",
-    images: ["https://picsum.photos/id/164/800/600", "https://picsum.photos/id/165/800/600", "https://picsum.photos/id/166/800/600"],
-    title: "Appartement Vue Mer",
-    location: "Marina Agadir",
-    type: "Apartment",
-    rawPrice: 2800000,
-    displayPrice: "2 800 000 MAD",
-    specs: { surface: "95 m²", rooms: 2, roi: "~8% Rentabilité", roomsDisplay: "2 Chambres" },
-    amenities: ['wifi', 'ac', 'pool', 'parking'],
-    description: "Superbe appartement situé en plein cœur de la Marina d'Agadir. Offrant une vue imprenable sur l'océan et le port de plaisance, ce bien est idéal pour la location courte durée haut de gamme.\n\nEntièrement rénové avec des matériaux de qualité, il dispose d'un grand salon lumineux, d'une cuisine équipée, de deux chambres spacieuses et d'une terrasse aménagée.\n\nUn investissement clé en main avec un fort potentiel locatif et une demande constante toute l'année."
-  },
-  {
-    id: 2,
-    image: "https://picsum.photos/id/249/800/600",
-    images: ["https://picsum.photos/id/249/800/600", "https://picsum.photos/id/250/800/600", "https://picsum.photos/id/251/800/600"],
-    title: "Studio Centre Ville",
-    location: "Talborjt, Agadir",
-    type: "Studio",
-    rawPrice: 850000,
-    displayPrice: "850 000 MAD",
-    specs: { surface: "45 m²", rooms: 1, roi: "~10% Rentabilité", roomsDisplay: "1 Chambre" },
-    amenities: ['wifi', 'tv', 'ac'],
-    description: "Charmant studio moderne situé dans le quartier historique de Talborjt. À proximité des commerces, restaurants et attractions locales.\n\nIdéal pour les couples ou les voyageurs d'affaires, ce studio a été optimisé pour offrir un confort maximal dans un espace compact.\n\nExcellente rentabilité locative grâce à sa position centrale et son prix attractif."
-  },
-  {
-    id: 3,
-    image: "https://picsum.photos/id/188/800/600",
-    images: ["https://picsum.photos/id/188/800/600", "https://picsum.photos/id/190/800/600", "https://picsum.photos/id/190/800/600"],
-    title: "Villa avec Piscine",
-    location: "Sonaba, Agadir",
-    type: "Villa",
-    rawPrice: 4500000,
-    displayPrice: "4 500 000 MAD",
-    specs: { surface: "300 m²", rooms: 4, roi: "~7% Rentabilité", roomsDisplay: "4 Chambres" },
-    amenities: ['wifi', 'pool', 'parking', 'ac', 'tv'],
-    description: "Magnifique villa moderne dans le quartier résidentiel de Sonaba.\n\nElle se compose de 4 suites parentales, d'un vaste séjour ouvert sur le jardin et la piscine privée chauffée.\n\nFinitions de luxe, climatisation centralisée, cuisine américaine.\n\nUn produit rare sur le marché, parfait pour les familles en vacances cherchant intimité et confort."
-  },
-  {
-    id: 4,
-    image: "https://picsum.photos/id/49/800/600",
-    images: ["https://picsum.photos/id/49/800/600", "https://picsum.photos/id/54/800/600", "https://picsum.photos/id/60/800/600"],
-    title: "Penthouse Panoramique",
-    location: "Founty, Agadir",
-    type: "Apartment",
-    rawPrice: 3200000,
-    displayPrice: "3 200 000 MAD",
-    specs: { surface: "120 m²", rooms: 3, roi: "~9% Rentabilité", roomsDisplay: "3 Chambres" },
-    amenities: ['wifi', 'ac', 'parking', 'tv'],
-    description: "Penthouse d'exception avec terrasse panoramique de 40m².\n\nSitué dans le quartier prisé de Founty, proche de la plage et des zones touristiques. Ce bien offre des prestations haut de gamme avec marbre au sol et cuisine italienne.\n\nLe bien est vendu meublé et équipé, prêt à la location immédiate."
-  }
-];
-
-const INITIAL_TESTIMONIALS: Testimonial[] = [
-  {
-    id: 1,
-    name: "Sophie Martin",
-    role: "Propriétaire - Villa Agadir",
-    content: "Depuis que j'ai confié ma villa à Nesty, mes revenus ont augmenté de 40%. Je n'ai plus à me soucier du ménage ou des clés. Un vrai soulagement !",
-    image: "https://picsum.photos/id/1011/150/150",
-    rating: 5
-  },
-  {
-    id: 2,
-    name: "Karim Benjelloun",
-    role: "Investisseur - Appartements Marina",
-    content: "L'équipe est très professionnelle. Le système de tarification dynamique fonctionne à merveille. Mes appartements sont quasi complets toute l'année.",
-    image: "https://picsum.photos/id/1005/150/150",
-    rating: 5
-  },
-  {
-    id: 3,
-    name: "Elena Rodriguez",
-    role: "Propriétaire - Riad",
-    content: "Une transparence totale sur les chiffres et une communication impeccable. Je recommande vivement Nesty pour tout propriétaire à Agadir.",
-    image: "https://picsum.photos/id/1027/150/150",
-    rating: 4
-  }
-];
+const DEFAULT_PROFILE: AdminProfile = {
+  firstName: 'Admin',
+  lastName: 'Nesty',
+  email: 'admin@nesty.ma',
+  bio: '',
+  notifications: { reservations: true, messages: true }
+};
 
 interface DataContextType {
+  isLoading: boolean;
   properties: Property[];
   testimonials: Testimonial[];
   messages: Message[];
-  addProperty: (property: Property) => void;
-  updateProperty: (id: number, property: Property) => void;
-  deleteProperty: (id: number) => void;
-  addMessage: (message: Omit<Message, 'id' | 'date' | 'read'>) => void;
-  markMessageRead: (id: number) => void;
-  deleteMessage: (id: number) => void;
+  addProperty: (property: Property) => Promise<void>;
+  updateProperty: (id: string | number, property: Property) => Promise<void>;
+  deleteProperty: (id: string | number) => Promise<void>;
+  addMessage: (message: Omit<Message, 'id' | 'date' | 'read'>) => Promise<void>;
+  markMessageRead: (id: string | number) => Promise<void>;
+  deleteMessage: (id: string | number) => Promise<void>;
   adminProfile: AdminProfile;
-  updateAdminProfile: (profile: AdminProfile) => void;
+  updateAdminProfile: (profile: AdminProfile) => Promise<void>;
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [properties, setProperties] = useState<Property[]>(() => {
-    const saved = localStorage.getItem('nesty_properties');
-    return saved ? JSON.parse(saved) : INITIAL_PROPERTIES;
-  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [adminProfile, setAdminProfile] = useState<AdminProfile>(DEFAULT_PROFILE);
 
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => {
-    const saved = localStorage.getItem('nesty_testimonials');
-    return saved ? JSON.parse(saved) : INITIAL_TESTIMONIALS;
-  });
+  // Migration Logic
+  useEffect(() => {
+    const migrateData = async () => {
+      if (localStorage.getItem('nesty_migration_done_v2')) return;
 
-  const [messages, setMessages] = useState<Message[]>(() => {
-    const saved = localStorage.getItem('nesty_messages');
-    return saved ? JSON.parse(saved) : [];
-  });
+      try {
+        // Check if Firestore is empty to avoid duplicating or overwriting
+        const propSnap = await getDocs(collection(db, 'properties'));
+        if (propSnap.empty) {
+          const localProps = localStorage.getItem('nesty_properties');
+          if (localProps) {
+            const parsed = JSON.parse(localProps);
+            for (const item of parsed) {
+              const { id, ...data } = item; // Remove old ID
+              await addDoc(collection(db, 'properties'), data);
+            }
+          }
+        }
 
-  const [adminProfile, setAdminProfile] = useState<AdminProfile>(() => {
-    const saved = localStorage.getItem('nesty_admin_profile');
-    return saved ? JSON.parse(saved) : {
-      firstName: 'Admin',
-      lastName: 'Nesty',
-      email: 'admin@nesty.ma',
-      bio: '',
-      notifications: { reservations: true, messages: true }
+        const msgSnap = await getDocs(collection(db, 'messages'));
+        if (msgSnap.empty) {
+          const local = localStorage.getItem('nesty_messages');
+          if (local) {
+            const parsed = JSON.parse(local);
+            for (const item of parsed) {
+              const { id, ...data } = item;
+              await addDoc(collection(db, 'messages'), data);
+            }
+          }
+        }
+
+        // Admin Profile
+        const profileRef = doc(db, 'settings', 'profile');
+        // Actually direct doc check is better but for migration flow:
+        const localProfile = localStorage.getItem('nesty_admin_profile');
+        if (localProfile) {
+          // We overwrite or set initial only? Let's set if not exists, but 'settings' might not allow list.
+          await setDoc(profileRef, JSON.parse(localProfile), { merge: true });
+        }
+
+        localStorage.setItem('nesty_migration_done_v2', 'true');
+        console.log("Migration completed");
+      } catch (err) {
+        console.error("Migration failed:", err);
+      }
     };
-  });
+
+    migrateData();
+  }, []);
+
+  // Subscriptions
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'properties'), (snap) => {
+      setProperties(snap.docs.map(d => ({ ...d.data(), id: d.id } as Property)));
+      setIsLoading(false); // Set loading to false once properties are loaded
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem('nesty_properties', JSON.stringify(properties));
-  }, [properties]);
+    const unsub = onSnapshot(collection(db, 'testimonials'), (snap) => {
+      setTestimonials(snap.docs.map(d => ({ ...d.data(), id: d.id } as Testimonial)));
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem('nesty_testimonials', JSON.stringify(testimonials));
-  }, [testimonials]);
+    const unsub = onSnapshot(collection(db, 'messages'), (snap) => {
+      setMessages(snap.docs.map(d => ({ ...d.data(), id: d.id } as Message)));
+    });
+    return unsub;
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem('nesty_messages', JSON.stringify(messages));
-  }, [messages]);
+    const unsub = onSnapshot(doc(db, 'settings', 'profile'), (snap) => {
+      if (snap.exists()) {
+        setAdminProfile(snap.data() as AdminProfile);
+      }
+    });
+    return unsub;
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem('nesty_admin_profile', JSON.stringify(adminProfile));
-  }, [adminProfile]);
 
-  const addProperty = (property: Property) => {
-    setProperties([...properties, { ...property, id: Date.now() }]);
+  // Actions
+  const addProperty = async (property: Property) => {
+    const { id, ...data } = property; // Ensure no ID is sent if it exists
+    await addDoc(collection(db, 'properties'), data);
   };
 
-  const updateProperty = (id: number, updatedProperty: Property) => {
-    setProperties(properties.map(p => p.id === id ? updatedProperty : p));
+  const updateProperty = async (id: string | number, updatedProperty: Property) => {
+    const { id: _, ...data } = updatedProperty;
+    await updateDoc(doc(db, 'properties', String(id)), data);
   };
 
-  const deleteProperty = (id: number) => {
-    setProperties(properties.filter(p => p.id !== id));
+  const deleteProperty = async (id: string | number) => {
+    await deleteDoc(doc(db, 'properties', String(id)));
   };
 
-  const addMessage = (msg: Omit<Message, 'id' | 'date' | 'read'>) => {
-    const newMessage: Message = {
+  const addMessage = async (msg: Omit<Message, 'id' | 'date' | 'read'>) => {
+    await addDoc(collection(db, 'messages'), {
       ...msg,
-      id: Date.now(),
       date: new Date().toISOString(),
       read: false
-    };
-    setMessages([newMessage, ...messages]);
+    });
   };
 
-  const markMessageRead = (id: number) => {
-    setMessages(messages.map(m => m.id === id ? { ...m, read: true } : m));
+  const markMessageRead = async (id: string | number) => {
+    await updateDoc(doc(db, 'messages', String(id)), { read: true });
   };
 
-  const deleteMessage = (id: number) => {
-    setMessages(messages.filter(m => m.id !== id));
+  const deleteMessage = async (id: string | number) => {
+    await deleteDoc(doc(db, 'messages', String(id)));
   };
 
-  const updateAdminProfile = (profile: AdminProfile) => {
-    setAdminProfile(profile);
+  const updateAdminProfile = async (profile: AdminProfile) => {
+    await setDoc(doc(db, 'settings', 'profile'), profile);
   };
 
   return (
     <DataContext.Provider value={{
+      isLoading,
       properties,
       testimonials,
       messages,

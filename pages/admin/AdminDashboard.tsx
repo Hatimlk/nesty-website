@@ -46,8 +46,16 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, color, tr
 };
 
 const AdminDashboard: React.FC = () => {
-   const { properties, messages } = useData();
+   const { properties, messages, isLoading } = useData();
    const unreadMessages = messages.filter(m => !m.read).length;
+
+   if (isLoading) {
+      return (
+         <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nesty-accent"></div>
+         </div>
+      );
+   }
 
    // Mock Chart Data
    const chartData = [45, 65, 45, 75, 90, 60, 80, 95, 65, 85, 95, 100];

@@ -3,9 +3,17 @@ import { useData } from '@/context/DataContext';
 import { Mail, Check, Trash2, Clock, CheckCircle2, Filter, Search, MoreVertical, Archive } from 'lucide-react';
 
 const AdminMessages: React.FC = () => {
-   const { messages, markMessageRead, deleteMessage } = useData();
+   const { messages, markMessageRead, deleteMessage, isLoading } = useData();
    const [filter, setFilter] = useState<'all' | 'unread'>('all');
    const [searchTerm, setSearchTerm] = useState('');
+
+   if (isLoading) {
+      return (
+         <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nesty-accent"></div>
+         </div>
+      );
+   }
 
    const sortedMessages = [...messages].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 

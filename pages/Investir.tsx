@@ -760,20 +760,20 @@ const Investir: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // Favorites State
-  const [favorites, setFavorites] = useState<number[]>(() => {
+  const [favorites, setFavorites] = useState<(string | number)[]>(() => {
     const saved = localStorage.getItem('nesty_favorites');
     return saved ? JSON.parse(saved) : [];
   });
 
   // Comparison State
-  const [compareList, setCompareList] = useState<number[]>([]);
+  const [compareList, setCompareList] = useState<(string | number)[]>([]);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
   // Detail Modal State
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
-  const toggleFavorite = (id: number) => {
+  const toggleFavorite = (id: string | number) => {
     let newFavorites;
     if (favorites.includes(id)) {
       newFavorites = favorites.filter(favId => favId !== id);
@@ -784,7 +784,7 @@ const Investir: React.FC = () => {
     localStorage.setItem('nesty_favorites', JSON.stringify(newFavorites));
   };
 
-  const toggleCompare = (id: number) => {
+  const toggleCompare = (id: string | number) => {
     if (compareList.includes(id)) {
       setCompareList(compareList.filter(cId => cId !== id));
     } else {

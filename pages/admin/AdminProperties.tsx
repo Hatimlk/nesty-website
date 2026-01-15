@@ -4,11 +4,19 @@ import { Property } from '@/types';
 import { Plus, Trash2, Edit, X, Save, Image as ImageIcon, Search, MapPin, Filter, MoreHorizontal, BedDouble, Ruler, Check } from 'lucide-react';
 
 const AdminProperties: React.FC = () => {
-   const { properties, addProperty, deleteProperty, updateProperty } = useData();
+   const { properties, addProperty, deleteProperty, updateProperty, isLoading } = useData();
    const [isModalOpen, setIsModalOpen] = useState(false);
-   const [editingId, setEditingId] = useState<number | null>(null);
+   const [editingId, setEditingId] = useState<string | number | null>(null);
    const [searchTerm, setSearchTerm] = useState('');
    const [locationFilter, setLocationFilter] = useState('All');
+
+   if (isLoading) {
+      return (
+         <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nesty-accent"></div>
+         </div>
+      );
+   }
 
    const initialFormState: Property = {
       id: 0,
