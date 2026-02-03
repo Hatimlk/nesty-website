@@ -1,5 +1,4 @@
-import { storage } from './firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { API_BASE_URL } from '@/utils/config';
 
 /**
  * Compresses an image file using Canvas.
@@ -46,9 +45,9 @@ const compressImage = async (file: File): Promise<Blob> => {
 };
 
 /**
- * Uploads an image file to Firebase Storage.
+ * Uploads an image file to Custom API.
  * @param file The file object to upload.
- * @param path The path in storage (e.g., 'properties/123').
+ * @param path Ignored in simple PHP version (handled by backend naming).
  * @returns Promise resolving to the public download URL.
  */
 export const uploadImage = async (file: File, path: string): Promise<string> => {
@@ -66,16 +65,29 @@ export const uploadImage = async (file: File, path: string): Promise<string> => 
         }
     }
 
-    // Create a unique filename
-    // Sanitize filename to avoid specific character issues
+    const formData = new FormData();
+    // Rename to .jpg if compressed
     const filename = file.name.replace(/[^a-zA-Z0-9.]/g, '_');
-    // Save as .jpg if compressed, otherwise original ext
     const finalFilename = file.type.startsWith('image/') ? `${filename.split('.')[0]}.jpg` : filename;
 
-    const storageRef = ref(storage, `${path}/${Date.now()}_${finalFilename}`);
+    formData.append('file', fileToUpload, finalFilename);
 
-    const snapshot = await uploadBytes(storageRef, fileToUpload);
-    const downloadURL = await getDownloadURL(snapshot.ref);
+    try {
+        const response = await fetch(`${API_BASE_URL}/upload.php`, {
+            method: 'POST',
+            body: formData
+        });
 
-    return downloadURL;
+        if (!response.ok) throw new Error('Upload failed');
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        // If returned URL is relative, prepend domain in production or handle appropriately
+        // Assuming upload.php returns absolute relative from root e.g., /uploads/file.jpg
+        return data.url;
+    } catch (error) {
+        console.error("Upload error:", error);
+        throw error;
+    }
 };

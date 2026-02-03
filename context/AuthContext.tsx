@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  User
-} from 'firebase/auth';
-import { auth } from '@/utils/firebase';
+import { API_BASE_URL } from '@/utils/config';
+
+interface User {
+  id: string | number;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+}
 
 interface AuthContextType {
   currentUser: User | null;
@@ -22,20 +23,47 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setIsLoading(false);
-    });
-
-    return unsubscribe;
+    // Check localStorage for persisted session
+    const storedUser = localStorage.getItem('nesty_user');
+    if (storedUser) {
+      try {
+        setCurrentUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse user session", e);
+        localStorage.removeItem('nesty_user');
+      }
+    }
+    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/login.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (data.status === 'success' && data.user) {
+        setCurrentUser(data.user);
+        localStorage.setItem('nesty_user', JSON.stringify(data.user));
+      } else {
+        throw new Error(data.error || 'Login failed');
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = async () => {
-    await signOut(auth);
+    localStorage.removeItem('nesty_user');
+    setCurrentUser(null);
   };
 
   const value = {
