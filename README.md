@@ -1,24 +1,26 @@
-# 🏠 Nesty - Real Estate Website
+# Nesty - Real Estate Website
 
 A modern, responsive real estate website built with Next.js, featuring property listings, search functionality, and an intuitive user interface.
+
+**Live Demo**: https://nesty-website-self.vercel.app/
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
 ![Responsive](https://img.shields.io/badge/Responsive-Design-green?style=for-the-badge)
 
-## 🚀 Features
+## Features
 
-- **🏘️ Property Listings** - Browse and search through available properties
-- **🔍 Advanced Search** - Filter properties by location, price, type, and more
-- **📱 Responsive Design** - Optimized for all devices (desktop, tablet, mobile)
-- **⚡ Fast Performance** - Built with Next.js for optimal speed and SEO
-- **🎨 Modern UI** - Clean and professional real estate interface
-- **🖼️ Image Galleries** - High-quality property images with smooth viewing
-- **🌙 Dark Mode** - Built-in dark mode support
-- **⚡ Fast Loading** - Optimized images and lazy loading
+- Property listings with search and filtering
+- Advanced search filters (location, price, type)
+- Responsive design for all devices
+- Fast performance with Next.js optimization
+- Modern, clean UI design
+- Image galleries with smooth viewing
+- Dark mode support
+- Optimized images and lazy loading
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: Next.js 14+ (App Router)
 - **Styling**: Tailwind CSS
@@ -27,44 +29,34 @@ A modern, responsive real estate website built with Next.js, featuring property 
 - **Fonts**: Geist Sans (Optimized)
 - **Deployment**: Vercel (Recommended)
 
-## 📦 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-Make sure you have the following installed:
 - Node.js 18.17 or later
 - npm, yarn, or pnpm
 
 ### Installation
 
-1. **Clone the repository**
+1. Clone the repository
    ```bash
    git clone https://github.com/Hatimlk/nesty-website.git
    cd nesty-website
    ```
 
-2. **Install dependencies**
+2. Install dependencies
    ```bash
    npm install
-   # or
-   yarn install
-   # or
-   pnpm install
    ```
 
-3. **Run the development server**
+3. Run the development server
    ```bash
    npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
    ```
 
-4. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000) to view the website.
+4. Open [http://localhost:3000](http://localhost:3000) to view the website.
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 nesty-website/
@@ -81,7 +73,7 @@ nesty-website/
 └── config/               # Configuration files
 ```
 
-## 🎯 Available Scripts
+## Available Scripts
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
@@ -89,10 +81,10 @@ nesty-website/
 - `npm run lint` - Run ESLint
 - `npm run type-check` - Run TypeScript type checking
 
-## 🎨 Customization
+## Customization
 
 ### Styling
-The project uses Tailwind CSS for styling. Modify the `tailwind.config.js` file to customize the design system:
+Modify `tailwind.config.js` to customize the design system:
 
 ```javascript
 // tailwind.config.js
@@ -117,7 +109,7 @@ module.exports = {
 ```
 
 ### Adding New Properties
-Update the property data in the components or create a data file to manage property listings:
+Update property data in components or create a data file:
 
 ```typescript
 // types/property.ts
@@ -134,26 +126,24 @@ export interface Property {
 }
 ```
 
-## 📱 Responsive Breakpoints
+## Responsive Breakpoints
 
 - **Mobile**: < 768px
 - **Tablet**: 768px - 1024px
 - **Desktop**: > 1024px
 
-## 🔧 Configuration
-
-### Environment Variables
-Create a `.env.local` file in the root directory for environment-specific configuration:
+## Environment Variables
+Create a `.env.local` file in the root directory:
 
 ```env
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_API_URL=your_api_url_here
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Vercel (Recommended)
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new) from the creators of Next.js.
+Deploy your Next.js app using the [Vercel Platform](https://vercel.com/new).
 
 1. Push your code to GitHub
 2. Import your repository to Vercel
@@ -161,14 +151,11 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 4. Your site will be deployed!
 
 ### Other Platforms
-You can also deploy on:
-- **Netlify**: Connect your GitHub repository and deploy
-- **AWS**: Use AWS Amplify or other services
+- **Netlify**: Connect your GitHub repository
+- **AWS**: Use AWS Amplify
 - **DigitalOcean**: Use App Platform
 
-## 🤝 Contributing
-
-We welcome contributions! Please follow these steps:
+## Contributing
 
 1. Fork the project
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
@@ -179,29 +166,20 @@ We welcome contributions! Please follow these steps:
 ### Development Guidelines
 - Follow TypeScript best practices
 - Use meaningful component and variable names
-- Ensure responsive design for all components
-- Add proper TypeScript types for all props
-- Test on multiple devices and browsers
+- Ensure responsive design
+- Add proper TypeScript types
+- Test on multiple devices
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Author
+## Author
 
-- **Hatim Lakrouni** - [Hatimlk](https://github.com/Hatimlk)
+**Hatim Lakrouni** - [Hatimlk](https://github.com/Hatimlk)
 
-## 🙏 Acknowledgments
+## Support
 
-- Next.js team for the amazing framework
-- Tailwind CSS for the utility-first CSS framework
-- Lucide for the beautiful icons
-- Vercel for seamless deployment
-
-## 📞 Support
-
-If you have any questions or need help with the setup:
-
-- 📧 Open an [issue](https://github.com/Hatimlk/nesty-website/issues) on GitHub
-- 💬 Check the [Next.js documentation](https://nextjs.org/docs)
-- 🎨 Refer to [Tailwind CSS docs](https://tailwindcss.com/docs)
+- Open an [issue](https://github.com/Hatimlk/nesty-website/issues) on GitHub
+- Check the [Next.js docs](https://nextjs.org/docs)
+- Refer to [Tailwind CSS docs](https://tailwindcss.com/docs)
